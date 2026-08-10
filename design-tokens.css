@@ -1,0 +1,42 @@
+/* gym-trainer 设计变量 —— 与 Ardot 原型 `713266082454827` 保持一致 */
+:root {
+  /* 背景层 */
+  --gt-bg: #0F1214;
+  --gt-surface: #181B22;
+  --gt-surface-2: #20242D;
+
+  /* 强调色 */
+  --gt-accent: #4ADE80;
+  --gt-accent-text: #04210F;      /* 在 accent 底上的文字/图标 */
+  --gt-accent-12: rgba(74, 222, 128, 0.12);
+  --gt-accent-15: rgba(74, 222, 128, 0.15);
+
+  /* 文字 */
+  --gt-text-primary: #FFFFFF;
+  --gt-text-secondary: #9AA3B2;
+
+  /* 功能色 */
+  --gt-danger: #F87171;
+  --gt-danger-12: rgba(248, 113, 113, 0.12);
+
+  /* 间距 */
+  --gt-space-xs: 4px;
+  --gt-space-sm: 8px;
+  --gt-space-md: 12px;
+  --gt-space-lg: 16px;
+  --gt-space-xl: 24px;
+
+  /* 圆角 */
+  --gt-radius-sm: 8px;
+  --gt-radius-md: 10px;
+  --gt-radius-lg: 12px;
+  --gt-radius-xl: 14px;
+  --gt-radius-pill: 999px;
+
+  /* 字号/字重 */
+  --gt-h1: 800 24px/1.2 Inter, system-ui, sans-serif;
+  --gt-h2: 800 20px/1.2 Inter, system-ui, sans-serif;
+  --gt-body: 700 15px/1.3 Inter, system-ui, sans-serif;
+  --gt-caption: 400 13px/1.4 "Sarasa Gothic SC", system-ui, sans-serif;
+  --gt-small: 400 12px/1.4 "Sarasa Gothic SC", system-ui, sans-serif;
+}

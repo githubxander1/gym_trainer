@@ -1,0 +1,13 @@
+{
+  "name": "练练 · 跟练助手",
+  "short_name": "练练",
+  "description": "自用健身跟练助手：动作库 + 自定义计划 + 倒计时语音跟练",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0f1115",
+  "theme_color": "#0f1115",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
