@@ -85,12 +85,20 @@
       restSec: 45,
       items: [['dumbbell goblet squat',3,12],['deep push up',3,12]] },
   ];
+  // 休息建议：按动作类型给出更合理的组间休息（不再统一 45s，整体更短）
+  function suggestRest(ex) {
+    const n = ((ex && (ex.name || '')) + ' ' + (ex && (ex.targetZh || ''))).toLowerCase();
+    if (/(burpee|mountain climber|high knee|plank|jump|running|sprint|jog|climb|skip)/.test(n)) return 15; // 有氧/计时类：短休息
+    if (/(curl|raise|fly|crunch|twist|dip|calf|lateral|sit up|reverse|glute|extension|leg raise|hip thrust|hip)/.test(n)) return 30; // 孤立/小肌群：中等
+    return 40; // 复合/大肌群：稍长但不过长
+  }
+
   function resolveTemplate(tpl) {
     const items = [];
     for (const [nm, sets, reps] of tpl.items) {
       const ex = window.AppData.getByName(nm);
       if (!ex) continue;
-      items.push({ exId: ex.id, sets, mode: 'rep', reps, workSec: 30, restSec: tpl.restSec || 45 });
+      items.push({ exId: ex.id, sets, mode: 'rep', reps, workSec: 30, restSec: suggestRest(ex) });
     }
     return items;
   }
@@ -234,7 +242,7 @@
   // ---------- 计划 ----------
   function addToPlan(id) {
     if (plan.some((p) => p.exId === id)) return;
-    plan.push({ exId: id, sets: 3, mode: 'rep', reps: 12, workSec: 30, restSec: 45 });
+    plan.push({ exId: id, sets: 3, mode: 'rep', reps: 12, workSec: 30, restSec: suggestRest(ex) });
     savePlan(); updateBadge();
     if (currentTab === 'plan') renderPlanView();
     if (currentTab === 'library') renderLibrary();
@@ -451,11 +459,15 @@
   }
 
   // ---------- 跟练 ----------
+  function setTrainingMode(on) {
+    const tb = document.querySelector('.tabbar');
+    if (tb) tb.style.display = on ? 'none' : '';
+  }
   function startTraining(items) {
     items = items || plan;
     if (!items.length) { alert('计划是空的，先去添加动作'); return; }
-    switchTab('player');
-    window.TrainerPlayer.start(items, view, () => switchTab('plan'));
+    setTrainingMode(true);
+    window.TrainerPlayer.start(items, view, () => { setTrainingMode(false); switchTab('plan'); });
   }
 
   // ---------- 路由 ----------
@@ -464,9 +476,6 @@
     tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === tab));
     if (tab === 'library') renderLibrary();
     else if (tab === 'plan') renderPlanView();
-    else if (tab === 'player') {
-      view.innerHTML = `<div class="empty"><div class="big">▶️</div>点下方「开始跟练」<br>从「计划」启动训练</div>`;
-    }
   }
   tabs.forEach((t) => { t.onclick = () => switchTab(t.dataset.tab); });
 

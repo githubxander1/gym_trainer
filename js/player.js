@@ -4,7 +4,6 @@
 //  - 顶部总进度条（按"组"统计，俯卧撑+下蹲+杠铃 各3组 = 共9组）
 //  - 暂停/继续（两种模式通用）、组间休息、语音(TTS)、屏幕常亮、自动切换
 window.TrainerPlayer = (function () {
-  const RING_C = 2 * Math.PI * 86;
   const REP_PACE_MS = 2500;   // 次数模式口令节奏：每个动作约 2.5 秒
 
   let container = null;
@@ -20,14 +19,16 @@ window.TrainerPlayer = (function () {
   let wakeLock = null;
   let onFinish = null;
 
-  function speak(text) {
+  function speak(text, cancelFirst) {
     if (!window.soundOn) return;
     try {
       if (!('speechSynthesis' in window)) return;
-      window.speechSynthesis.cancel();
+      const ss = window.speechSynthesis;
+      if (ss.paused) ss.resume();
+      if (cancelFirst) ss.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'zh-CN'; u.rate = 1.0; u.pitch = 1.0;
-      window.speechSynthesis.speak(u);
+      ss.speak(u);
     } catch (e) {}
   }
 
@@ -101,21 +102,16 @@ window.TrainerPlayer = (function () {
     // 次数模式
     if (isWork && seg.isRep) {
       const remain = Math.max(0, seg.reps - repDone);
+      const repPct = Math.min(100, repDone / seg.reps * 100);
       container.innerHTML = `
         <div class="player">
           ${progressHtml()}
           <div class="player-phase ${phaseCls}">${phase}</div>
-          <div class="ring-wrap">
-            <svg viewBox="0 0 200 200" class="ring">
-              <circle cx="100" cy="100" r="86" class="ring-bg"></circle>
-              <circle cx="100" cy="100" r="86" class="ring-fg" id="ringFg"
-                stroke-dasharray="${RING_C}" stroke-dashoffset="${RING_C * (1 - repDone / seg.reps)}"></circle>
-            </svg>
-            <div class="ring-center">
-              <div class="time" id="repNum">${repDone}</div>
-              <div class="phase-sub" id="phaseSub">第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${remain} 次</div>
-            </div>
+          <div class="count-num" id="repNum">${repDone}</div>
+          <div class="hbar-wrap">
+            <div class="hbar-track"><div class="hbar-fill" id="barFill" style="width:${repPct}%"></div></div>
           </div>
+          <div class="phase-sub" id="phaseSub">第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${remain} 次</div>
           <div class="player-name">${nameZh}</div>
           ${ex ? `<img class="player-gif" src="${ex.gif}" alt="" onerror="this.style.display='none'">` : ''}
           <div class="player-controls">
@@ -140,17 +136,11 @@ window.TrainerPlayer = (function () {
       <div class="player">
         ${progressHtml()}
         <div class="player-phase ${phaseCls}">${phase}</div>
-        <div class="ring-wrap">
-          <svg viewBox="0 0 200 200" class="ring">
-            <circle cx="100" cy="100" r="86" class="ring-bg"></circle>
-            <circle cx="100" cy="100" r="86" class="ring-fg ${isWork ? '' : 'rest'}" id="ringFg"
-              stroke-dasharray="${RING_C}" stroke-dashoffset="${RING_C * (1 - ringPct)}"></circle>
-          </svg>
-          <div class="ring-center">
-            <div class="time" id="timeText">${fmt(remain)}</div>
-            <div class="phase-sub" id="phaseSub">${setLabel}</div>
-          </div>
+        <div class="count-num" id="timeText">${fmt(remain)}</div>
+        <div class="hbar-wrap">
+          <div class="hbar-track"><div class="hbar-fill ${isWork ? '' : 'rest'}" id="barFill" style="width:${Math.min(100, ringPct * 100)}%"></div></div>
         </div>
+        <div class="phase-sub" id="phaseSub">${setLabel}</div>
         <div class="player-name">${nameZh}</div>
         ${ex ? `<img class="player-gif" src="${ex.gif}" alt="" onerror="this.style.display='none'">` : ''}
         <div class="player-controls">
@@ -191,11 +181,11 @@ window.TrainerPlayer = (function () {
     if ((seg.sec || 0) <= 0) return;            // 次数模式不在此倒计时
     const remain = (endTime - Date.now()) / 1000;
     const el = document.getElementById('timeText');
-    const ring = document.getElementById('ringFg');
+    const bar = document.getElementById('barFill');
     if (el) el.textContent = fmt(Math.max(0, Math.ceil(remain)));
-    if (ring) {
+    if (bar) {
       const pct = Math.min(1, Math.max(0, 1 - remain / seg.sec));
-      ring.setAttribute('stroke-dashoffset', RING_C * (1 - pct));
+      bar.style.width = (pct * 100) + '%';
     }
     if (!warned3 && remain <= 3 && remain > 0) {
       warned3 = true;
@@ -211,12 +201,12 @@ window.TrainerPlayer = (function () {
     if (!seg || !seg.isRep) return;
     repDone++;
     if (repDone <= seg.reps) {
-      speak(`第 ${repDone} 个`);
+      speak(String(repDone));
       const el = document.getElementById('repNum'); if (el) el.textContent = repDone;
       const sub = document.getElementById('phaseSub');
       if (sub) sub.textContent = `第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${Math.max(0, seg.reps - repDone)} 次`;
-      const ring = document.getElementById('ringFg');
-      if (ring) { const pct = Math.min(1, repDone / seg.reps); ring.setAttribute('stroke-dashoffset', RING_C * (1 - pct)); }
+      const bar = document.getElementById('barFill');
+      if (bar) bar.style.width = (Math.min(1, repDone / seg.reps) * 100) + '%';
       if (repDone >= seg.reps) { speak('这组完成'); stopRep(); setTimeout(() => next(true), 600); }
     }
   }
@@ -230,21 +220,20 @@ window.TrainerPlayer = (function () {
     const ex = seg.type === 'work' ? seg.ex : seg.nextEx;
     if (seg.type === 'work') {
       if (seg.isRep) {
-        repDone = 1;
+        repDone = 0;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，做 ${seg.reps} 次`);
-        speak(`第 1 个`);
+        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
         startRep();
       } else {
         endTime = Date.now() + seg.sec * 1000;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`);
+        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
         startTick();
       }
     } else {
       endTime = Date.now() + seg.sec * 1000;
       render();
-      speak(`休息 ${seg.sec} 秒`);
+      speak(`休息 ${seg.sec} 秒`, true);
       startTick();
     }
   }
