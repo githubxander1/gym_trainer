@@ -59,12 +59,12 @@ window.TrainerPlayer = (function () {
   }
   // 不同场景用不同音效区分
   const Cue = {
-    start() { if (!window.soundOn) return; tone(523.25, 110, 0, 'sine', 0.14); },                                                                     // 开始一组：单音"叮"
-    repTick() { if (!window.soundOn) return; tone(880, 40, 0, 'square', 0.05); },                                                                      // 每个动作：轻"嗒"
-    setComplete() { if (!window.soundOn) return; tone(659.25, 140, 0, 'sine', 0.18); tone(880, 260, 150, 'sine', 0.18); },                             // 一组完成：上行两音
-    restStart() { if (!window.soundOn) return; tone(392, 280, 0, 'sine', 0.15); },                                                                     // 进入休息：低柔音
-    count3() { if (!window.soundOn) return; tone(880, 70, 0, 'square', 0.11); tone(987.77, 70, 150, 'square', 0.11); tone(1046.5, 70, 300, 'square', 0.11); }, // 倒计时3秒：三连升
-    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 200, i * 160, 'triangle', 0.2)); }      // 全部完成：上行小旋律
+    start() { if (!window.soundOn) return; tone(523.25, 110, 0, 'sine', 0.30); },                                                                     // 开始一组：单音"叮"
+    repTick() { if (!window.soundOn) return; tone(880, 40, 0, 'square', 0.14); },                                                                      // 每个动作：轻"嗒"
+    setComplete() { if (!window.soundOn) return; tone(659.25, 140, 0, 'sine', 0.36); tone(880, 260, 150, 'sine', 0.36); },                             // 一组完成：上行两音
+    restStart() { if (!window.soundOn) return; tone(392, 280, 0, 'sine', 0.30); },                                                                     // 进入休息：低柔音
+    count3() { if (!window.soundOn) return; tone(880, 70, 0, 'square', 0.24); tone(987.77, 70, 150, 'square', 0.24); tone(1046.5, 70, 300, 'square', 0.24); }, // 倒计时3秒：三连升
+    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 200, i * 160, 'triangle', 0.38)); }      // 全部完成：上行小旋律
   };
 
   async function keepAwake() {
