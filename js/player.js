@@ -32,6 +32,41 @@ window.TrainerPlayer = (function () {
     } catch (e) {}
   }
 
+  // ---------- Web Audio 提示音（不依赖系统 TTS，安卓 Chrome 静音时也能响） ----------
+  let actx = null;
+  function ensureAudio() {
+    try {
+      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if (actx && actx.state === 'suspended') actx.resume();
+    } catch (e) { actx = null; }
+    return actx;
+  }
+  function tone(freq, durMs, delayMs, type, gainVal) {
+    const ac = ensureAudio();
+    if (!ac) return;
+    const t0 = ac.currentTime + (delayMs || 0) / 1000;
+    const osc = ac.createOscillator();
+    const g = ac.createGain();
+    osc.type = type || 'sine';
+    osc.frequency.setValueAtTime(freq, t0);
+    const peak = gainVal || 0.2;
+    g.gain.setValueAtTime(0.0001, t0);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t0 + durMs / 1000);
+    osc.connect(g); g.connect(ac.destination);
+    osc.start(t0);
+    osc.stop(t0 + durMs / 1000 + 0.03);
+  }
+  // 不同场景用不同音效区分
+  const Cue = {
+    start() { if (!window.soundOn) return; tone(523.25, 110, 0, 'sine', 0.14); },                                                                     // 开始一组：单音"叮"
+    repTick() { if (!window.soundOn) return; tone(880, 40, 0, 'square', 0.05); },                                                                      // 每个动作：轻"嗒"
+    setComplete() { if (!window.soundOn) return; tone(659.25, 140, 0, 'sine', 0.18); tone(880, 260, 150, 'sine', 0.18); },                             // 一组完成：上行两音
+    restStart() { if (!window.soundOn) return; tone(392, 280, 0, 'sine', 0.15); },                                                                     // 进入休息：低柔音
+    count3() { if (!window.soundOn) return; tone(880, 70, 0, 'square', 0.11); tone(987.77, 70, 150, 'square', 0.11); tone(1046.5, 70, 300, 'square', 0.11); }, // 倒计时3秒：三连升
+    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 200, i * 160, 'triangle', 0.2)); }      // 全部完成：上行小旋律
+  };
+
   async function keepAwake() {
     try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (e) {}
   }
@@ -172,6 +207,7 @@ window.TrainerPlayer = (function () {
       </div>`;
     document.getElementById('backBtn').onclick = () => { if (onFinish) onFinish(); };
     speak('训练完成，辛苦了');
+    Cue.workoutComplete();
   }
 
   // ---------- 计时（秒） ----------
@@ -191,8 +227,9 @@ window.TrainerPlayer = (function () {
     if (!warned3 && remain <= 3 && remain > 0) {
       warned3 = true;
       speak(seg.type === 'work' ? '还有三秒' : '准备');
+      Cue.count3();
     }
-    if (remain <= 0) next(true);
+    if (remain <= 0) { if (seg.type === 'work') Cue.setComplete(); next(true); }
   }
 
   // ---------- 次数口令 ----------
@@ -203,12 +240,13 @@ window.TrainerPlayer = (function () {
     repDone++;
     if (repDone <= seg.reps) {
       speak(String(repDone));
+      Cue.repTick();
       const el = document.getElementById('repNum'); if (el) el.textContent = repDone;
       const sub = document.getElementById('phaseSub');
       if (sub) sub.textContent = `第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${Math.max(0, seg.reps - repDone)} 次`;
       const bar = document.getElementById('barFill');
       if (bar) bar.style.width = (Math.min(1, repDone / seg.reps) * 100) + '%';
-      if (repDone >= seg.reps) { speak('这组完成'); stopRep(); setTimeout(() => next(true), 600); }
+      if (repDone >= seg.reps) { speak('这组完成'); Cue.setComplete(); stopRep(); setTimeout(() => next(true), 600); }
     }
   }
 
@@ -224,17 +262,20 @@ window.TrainerPlayer = (function () {
         repDone = 0;
         render();
         speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
+        Cue.start();
         startRep();
       } else {
         endTime = Date.now() + seg.sec * 1000;
         render();
         speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
+        Cue.start();
         startTick();
       }
     } else {
       endTime = Date.now() + seg.sec * 1000;
       render();
       speak(`休息 ${seg.sec} 秒`, true);
+      Cue.restStart();
       startTick();
     }
   }
@@ -276,6 +317,7 @@ window.TrainerPlayer = (function () {
   async function start(planItems, mountEl, finishCb) {
     container = mountEl;
     onFinish = finishCb;
+    ensureAudio(); // 在用户手势内创建/恢复音频上下文，保证提示音可响（安卓 Chrome TTS 失效时尤其重要）
     // 移动端(iOS/Android)：必须在用户手势内先"解锁"语音引擎，否则开始后首句静音
     try {
       if (window.speechSynthesis) {
