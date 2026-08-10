@@ -1,5 +1,5 @@
 // 跟练引擎
-//  - 次数模式(rep)：口令版跟练，系统逐个数"第1个…第2个…"，圆环按次数填充，到点自动进下一组
+//  - 次数模式(rep)：口令版跟练，系统逐个数"1…2…3…"，横条按次数填充，到点自动进下一组
 //  - 计时模式(time)：秒倒计时（休息/计时动作）
 //  - 顶部总进度条（按"组"统计，俯卧撑+下蹲+杠铃 各3组 = 共9组）
 //  - 暂停/继续（两种模式通用）、组间休息、语音(TTS)、屏幕常亮、自动切换
@@ -55,10 +55,11 @@ window.TrainerPlayer = (function () {
       for (let s = 1; s <= sets; s++) {
         groupNo++;
         segs.push({ type: 'work', ex, set: s, totalSets: sets, sec, reps, isRep, groupNo });
-        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, nextEx: ex });
+        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, totalSets: sets, nextEx: ex });
       }
       if (i < planItems.length - 1) {
-        segs.push({ type: 'rest', sec: rest, ex, set: 1, nextEx: window.AppData.get(planItems[i + 1].exId) });
+        const nx = planItems[i + 1];
+        segs.push({ type: 'rest', sec: rest, ex, set: 1, totalSets: nx.sets || 3, nextEx: window.AppData.get(nx.exId) });
       }
     });
     if (segs.length && segs[segs.length - 1].type === 'rest') segs.pop();

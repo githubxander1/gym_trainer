@@ -265,6 +265,7 @@
   // ---------- 计划 ----------
   function addToPlan(id) {
     if (plan.some((p) => p.exId === id)) return;
+    const ex = window.AppData.get(id);
     plan.push({ exId: id, sets: 3, mode: 'rep', reps: 12, workSec: 30, restSec: suggestRest(ex) });
     savePlan(); updateBadge();
     if (currentTab === 'plan') renderPlanView();
