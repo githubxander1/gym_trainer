@@ -19,6 +19,11 @@ window.TrainerPlayer = (function () {
   let wakeLock = null;
   let onFinish = null;
 
+  // 训练总时长（暂停冻结，用于进度条右侧显示）
+  let trainStart = 0;
+  let pausedAccum = 0;
+  let durTimer = null;
+
   function speak(text, cancelFirst) {
     if (!window.soundOn) return;
     try {
@@ -34,11 +39,18 @@ window.TrainerPlayer = (function () {
 
   // ---------- Web Audio 提示音（不依赖系统 TTS，安卓 Chrome 静音时也能响） ----------
   let actx = null;
+  let masterGain = null;
   function ensureAudio() {
     try {
-      if (!actx) actx = new (window.AudioContext || window.webkitAudioContext)();
+      if (!actx) {
+        actx = new (window.AudioContext || window.webkitAudioContext)();
+        // 主增益：整体抬高输出，避免手机已最大声仍偏小
+        masterGain = actx.createGain();
+        masterGain.gain.value = 1.0;
+        masterGain.connect(actx.destination);
+      }
       if (actx && actx.state === 'suspended') actx.resume();
-    } catch (e) { actx = null; }
+    } catch (e) { actx = null; masterGain = null; }
     return actx;
   }
   function tone(freq, durMs, delayMs, type, gainVal) {
@@ -49,22 +61,22 @@ window.TrainerPlayer = (function () {
     const g = ac.createGain();
     osc.type = type || 'sine';
     osc.frequency.setValueAtTime(freq, t0);
-    const peak = gainVal || 0.2;
+    const peak = gainVal || 0.4;
     g.gain.setValueAtTime(0.0001, t0);
-    g.gain.exponentialRampToValueAtTime(peak, t0 + 0.012);
+    g.gain.exponentialRampToValueAtTime(peak, t0 + 0.01);
     g.gain.exponentialRampToValueAtTime(0.0001, t0 + durMs / 1000);
-    osc.connect(g); g.connect(ac.destination);
+    osc.connect(g); g.connect(masterGain || ac.destination);
     osc.start(t0);
     osc.stop(t0 + durMs / 1000 + 0.03);
   }
-  // 不同场景用不同音效区分
+  // 不同场景用不同音效区分（频率上移到手机扬声器易发声区间 600~1300Hz，主增益已顶满 1.0，各音峰值也拉到接近满格，辨识度与响度都最大）
   const Cue = {
-    start() { if (!window.soundOn) return; tone(523.25, 110, 0, 'sine', 0.30); },                                                                     // 开始一组：单音"叮"
-    repTick() { if (!window.soundOn) return; tone(880, 40, 0, 'square', 0.14); },                                                                      // 每个动作：轻"嗒"
-    setComplete() { if (!window.soundOn) return; tone(659.25, 140, 0, 'sine', 0.36); tone(880, 260, 150, 'sine', 0.36); },                             // 一组完成：上行两音
-    restStart() { if (!window.soundOn) return; tone(392, 280, 0, 'sine', 0.30); },                                                                     // 进入休息：低柔音
-    count3() { if (!window.soundOn) return; tone(880, 70, 0, 'square', 0.24); tone(987.77, 70, 150, 'square', 0.24); tone(1046.5, 70, 300, 'square', 0.24); }, // 倒计时3秒：三连升
-    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 200, i * 160, 'triangle', 0.38)); }      // 全部完成：上行小旋律
+    start() { if (!window.soundOn) return; tone(880, 170, 0, 'sine', 1.0); tone(1320, 170, 0, 'sine', 0.35); },                                             // 开始一组：清亮"叮"（带泛音的钟声感）
+    repTick() { if (!window.soundOn) return; tone(1175, 60, 0, 'triangle', 0.9); },                                                                       // 每个动作：清脆"嗒"
+    setComplete() { if (!window.soundOn) return; tone(880, 150, 0, 'sine', 0.95); tone(1175, 280, 120, 'sine', 0.95); },                                    // 一组完成：上行两音
+    restStart() { if (!window.soundOn) return; tone(587.33, 340, 0, 'sine', 0.9); },                                                                      // 进入休息：中低柔音（比原 392Hz 更易听见）
+    count3() { if (!window.soundOn) return; tone(987.77, 90, 0, 'square', 0.9); tone(1174.66, 90, 140, 'square', 0.9); tone(1318.51, 100, 280, 'square', 0.9); }, // 倒计时3秒：三连升方波报警音
+    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 230, i * 150, 'triangle', 0.95)); }         // 全部完成：上行小旋律
   };
 
   async function keepAwake() {
@@ -111,12 +123,17 @@ window.TrainerPlayer = (function () {
     const current = seg ? Math.min(done + 1, total) : total;
     return { done, total, current: Math.min(current, total) };
   }
+  function getElapsed() { return Math.max(0, Math.floor((Date.now() - trainStart - pausedAccum) / 1000)); }
+  function updateDuration() { const el = document.getElementById('durText'); if (el) el.textContent = '⏱ ' + fmt(getElapsed()); }
   function progressHtml() {
     const { done, total, current } = groupProgress();
     const pct = total ? (done / total * 100) : 0;
     return `<div class="progress-wrap">
       <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:${pct}%"></div></div>
-      <div class="progress-label" id="progLabel">第 ${current} / ${total} 组</div>
+      <div class="progress-meta">
+        <span class="progress-label" id="progLabel">第 ${current} / ${total} 组</span>
+        <span class="duration" id="durText">⏱ ${fmt(getElapsed())}</span>
+      </div>
     </div>`;
   }
   function updateProgress() {
@@ -132,8 +149,6 @@ window.TrainerPlayer = (function () {
     const ex = seg.type === 'work' ? seg.ex : seg.nextEx;
     const nameZh = ex ? (ex.nameZh || ex.name) : '休息';
     const isWork = seg.type === 'work';
-    const phase = isWork ? (seg.isRep ? '次数跟练' : '计时跟练') : '休息';
-    const phaseCls = isWork ? 'work' : 'rest';
 
     // 次数模式
     if (isWork && seg.isRep) {
@@ -142,7 +157,6 @@ window.TrainerPlayer = (function () {
       container.innerHTML = `
         <div class="player">
           ${progressHtml()}
-          <div class="player-phase ${phaseCls}">${phase}</div>
           <div class="count-num" id="repNum">${repDone}</div>
           <div class="hbar-wrap">
             <div class="hbar-track"><div class="hbar-fill" id="barFill" style="width:${repPct}%"></div></div>
@@ -171,7 +185,6 @@ window.TrainerPlayer = (function () {
     container.innerHTML = `
       <div class="player">
         ${progressHtml()}
-        <div class="player-phase ${phaseCls}">${phase}</div>
         <div class="count-num" id="timeText">${fmt(remain)}</div>
         <div class="hbar-wrap">
           <div class="hbar-track"><div class="hbar-fill ${isWork ? '' : 'rest'}" id="barFill" style="width:${Math.min(100, ringPct * 100)}%"></div></div>
@@ -194,6 +207,7 @@ window.TrainerPlayer = (function () {
 
   function renderDone() {
     const total = totalGroups();
+    if (durTimer) { clearInterval(durTimer); durTimer = null; }
     container.innerHTML = `
       <div class="player done">
         <div class="progress-wrap">
@@ -202,7 +216,7 @@ window.TrainerPlayer = (function () {
         </div>
         <div class="done-emoji">🎉</div>
         <div class="done-title">训练完成！</div>
-        <div class="done-sub">本次共 ${total} 组动作</div>
+        <div class="done-sub">本次共 ${total} 组动作 · 用时 ${fmt(getElapsed())}</div>
         <button class="primary-btn" id="backBtn">返回</button>
       </div>`;
     document.getElementById('backBtn').onclick = () => { if (onFinish) onFinish(); };
@@ -295,7 +309,7 @@ window.TrainerPlayer = (function () {
       stopTick(); stopRep();
       if (b) b.textContent = '▶ 继续';
     } else {
-      if (pauseStart) endTime += (Date.now() - pauseStart);
+      if (pauseStart) { endTime += (Date.now() - pauseStart); pausedAccum += (Date.now() - pauseStart); }
       if (b) b.textContent = '⏸ 暂停';
       const seg = segments[idx];
       if (seg && seg.sec > 0) startTick();
@@ -310,6 +324,7 @@ window.TrainerPlayer = (function () {
 
   function stop() {
     stopTick(); stopRep(); releaseAwake();
+    if (durTimer) { clearInterval(durTimer); durTimer = null; }
     try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
     if (onFinish) onFinish();
   }
@@ -318,6 +333,10 @@ window.TrainerPlayer = (function () {
     container = mountEl;
     onFinish = finishCb;
     ensureAudio(); // 在用户手势内创建/恢复音频上下文，保证提示音可响（安卓 Chrome TTS 失效时尤其重要）
+    trainStart = Date.now(); pausedAccum = 0;
+    if (durTimer) clearInterval(durTimer);
+    durTimer = setInterval(updateDuration, 500);
+    updateDuration();
     // 移动端(iOS/Android)：必须在用户手势内先"解锁"语音引擎，否则开始后首句静音
     try {
       if (window.speechSynthesis) {

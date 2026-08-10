@@ -168,13 +168,20 @@
     input.addEventListener('input', onSearch);
     input.addEventListener('compositionend', onSearch); // 拼音输入法提交后再过滤，避免中文搜不到
     view.querySelectorAll('#partChips .chip').forEach((c) => {
-      c.onclick = () => { filterPart = c.dataset.part; shown = PAGE_SIZE; updateList(); };
+      c.onclick = () => { filterPart = c.dataset.part; shown = PAGE_SIZE; syncChipActive('#partChips', 'part', filterPart); updateList(); };
     });
     view.querySelectorAll('#eqChips .chip').forEach((c) => {
-      c.onclick = () => { filterEq = c.dataset.eq; shown = PAGE_SIZE; updateList(); };
+      c.onclick = () => { filterEq = c.dataset.eq; shown = PAGE_SIZE; syncChipActive('#eqChips', 'eq', filterEq); updateList(); };
     });
     shown = PAGE_SIZE;
     updateList();
+  }
+
+  // 点击筛选后同步 .active 高亮（updateList 只重渲染列表，不重渲染筛选 chip，需手动更新）
+  function syncChipActive(chipsSel, dataKey, val) {
+    view.querySelectorAll(chipsSel + ' .chip').forEach((c) => {
+      c.classList.toggle('active', c.dataset[dataKey] === val);
+    });
   }
 
   function updateList() {
