@@ -6,6 +6,7 @@
   let plan = [];                 // [{exId, sets, mode:'rep'|'time', reps, workSec, restSec}]
   let currentTab = 'library';
   let filterPart = '全部';
+  let filterEq = '全部';
   let keyword = '';
   let filterGoal = '全部';
   let planRoute = 'library';   // 'library' | 'detail' | 'custom'
@@ -30,33 +31,34 @@
   };
 
   // ---------- 预设计划（一/三/五 全身，约30分钟） ----------
+  // 组间休息统一 ≤30s（有氧类更短），避免长时间空等
   const PRESETS = {
     '周一·全身A': [
-      ['dumbbell goblet squat', 3, 'rep', 12, 45],
-      ['deep push up', 3, 'rep', 12, 45],
-      ['barbell bent over row', 3, 'rep', 12, 45],
-      ['front plank with twist', 3, 'time', 45, 30],
-      ['dumbbell seated shoulder press', 3, 'rep', 12, 45],
-      ['russian twist', 3, 'rep', 20, 45],
-      ['bodyweight standing calf raise', 3, 'rep', 15, 45],
+      ['dumbbell goblet squat', 3, 'rep', 12, 30],
+      ['deep push up', 3, 'rep', 12, 30],
+      ['barbell bent over row', 3, 'rep', 12, 30],
+      ['front plank with twist', 3, 'time', 45, 20],
+      ['dumbbell seated shoulder press', 3, 'rep', 12, 30],
+      ['russian twist', 3, 'rep', 20, 30],
+      ['bodyweight standing calf raise', 3, 'rep', 15, 30],
     ],
     '周三·全身B': [
-      ['wide grip pull-up', 3, 'rep', 8, 60],
-      ['barbell lunge', 3, 'rep', 12, 45],
-      ['dumbbell hammer curl', 3, 'rep', 12, 45],
-      ['low glute bridge on floor', 3, 'rep', 15, 45],
-      ['dumbbell lateral raise', 3, 'rep', 12, 45],
-      ['burpee', 3, 'time', 30, 30],
-      ['flexion leg sit up (bent knee)', 3, 'rep', 15, 45],
+      ['wide grip pull-up', 3, 'rep', 8, 30],
+      ['barbell lunge', 3, 'rep', 12, 30],
+      ['dumbbell hammer curl', 3, 'rep', 12, 30],
+      ['low glute bridge on floor', 3, 'rep', 15, 30],
+      ['dumbbell lateral raise', 3, 'rep', 12, 30],
+      ['burpee', 3, 'time', 30, 20],
+      ['flexion leg sit up (bent knee)', 3, 'rep', 15, 30],
     ],
     '周五·全身C': [
-      ['dumbbell romanian deadlift', 3, 'rep', 12, 45],
-      ['diamond push-up', 3, 'rep', 10, 45],
-      ['dumbbell fly', 3, 'rep', 12, 45],
-      ['mountain climber', 3, 'time', 30, 30],
-      ['weighted tricep dips', 3, 'rep', 10, 45],
-      ['reverse crunch', 3, 'rep', 15, 45],
-      ['high knee against wall', 3, 'time', 30, 30],
+      ['dumbbell romanian deadlift', 3, 'rep', 12, 30],
+      ['diamond push-up', 3, 'rep', 10, 30],
+      ['dumbbell fly', 3, 'rep', 12, 30],
+      ['mountain climber', 3, 'time', 30, 20],
+      ['weighted tricep dips', 3, 'rep', 10, 30],
+      ['reverse crunch', 3, 'rep', 15, 30],
+      ['high knee against wall', 3, 'time', 30, 20],
     ],
   };
 
@@ -85,12 +87,12 @@
       restSec: 45,
       items: [['dumbbell goblet squat',3,12],['deep push up',3,12]] },
   ];
-  // 休息建议：按动作类型给出更合理的组间休息（不再统一 45s，整体更短）
+  // 休息建议：按动作类型给出更合理的组间休息（统一 ≤30s，避免空等）
   function suggestRest(ex) {
     const n = ((ex && (ex.name || '')) + ' ' + (ex && (ex.targetZh || ''))).toLowerCase();
     if (/(burpee|mountain climber|high knee|plank|jump|running|sprint|jog|climb|skip)/.test(n)) return 15; // 有氧/计时类：短休息
-    if (/(curl|raise|fly|crunch|twist|dip|calf|lateral|sit up|reverse|glute|extension|leg raise|hip thrust|hip)/.test(n)) return 30; // 孤立/小肌群：中等
-    return 40; // 复合/大肌群：稍长但不过长
+    if (/(curl|raise|fly|crunch|twist|dip|calf|lateral|sit up|reverse|glute|extension|leg raise|hip thrust|hip)/.test(n)) return 25; // 孤立/小肌群：中等
+    return 30; // 复合/大肌群：封顶 30s
   }
 
   function resolveTemplate(tpl) {
@@ -144,20 +146,32 @@
 
   function renderLibrary() {
     const parts = ['全部', ...window.AppData.bodyParts()];
-    const chips = parts.map((p) =>
+    const partChips = parts.map((p) =>
       `<button class="chip ${p === filterPart ? 'active' : ''}" data-part="${p}">${p}</button>`).join('');
+    const eqs = ['全部', ...equipList()];
+    const eqChips = eqs.map((q) =>
+      `<button class="chip ${q === filterEq ? 'active' : ''}" data-eq="${q}">${q}</button>`).join('');
     view.innerHTML = `
-      <input class="search" id="searchInput" placeholder="搜索动作 / 中文名 / 部位" value="${esc(keyword)}" />
-      <div class="chips" id="chips">${chips}</div>
+      <input class="search" id="searchInput" placeholder="搜索动作名 / 部位 / 器械" value="${esc(keyword)}" />
+      <div class="filter-block">
+        <div class="filter-label">按部位</div>
+        <div class="chips" id="partChips">${partChips}</div>
+      </div>
+      <div class="filter-block">
+        <div class="filter-label">按器械</div>
+        <div class="chips" id="eqChips">${eqChips}</div>
+      </div>
       <div class="list" id="list"></div>`;
 
-    document.getElementById('searchInput').oninput = (e) => {
-      keyword = e.target.value.trim().toLowerCase();
-      shown = PAGE_SIZE;
-      updateList();   // 只更新列表，保留搜索框焦点
-    };
-    view.querySelectorAll('.chip').forEach((c) => {
+    const input = document.getElementById('searchInput');
+    const onSearch = () => { keyword = input.value.trim().toLowerCase(); shown = PAGE_SIZE; updateList(); };
+    input.addEventListener('input', onSearch);
+    input.addEventListener('compositionend', onSearch); // 拼音输入法提交后再过滤，避免中文搜不到
+    view.querySelectorAll('#partChips .chip').forEach((c) => {
       c.onclick = () => { filterPart = c.dataset.part; shown = PAGE_SIZE; updateList(); };
+    });
+    view.querySelectorAll('#eqChips .chip').forEach((c) => {
+      c.onclick = () => { filterEq = c.dataset.eq; shown = PAGE_SIZE; updateList(); };
     });
     shown = PAGE_SIZE;
     updateList();
@@ -190,14 +204,23 @@
   function filtered() {
     let arr = window.AppData.all();
     if (filterPart !== '全部') arr = arr.filter((e) => e.bodyPartZh === filterPart);
+    if (filterEq !== '全部') arr = arr.filter((e) => e.equipmentZh === filterEq);
     if (keyword) {
       arr = arr.filter((e) =>
         (e.nameZh || '').toLowerCase().includes(keyword) ||
         (e.name || '').toLowerCase().includes(keyword) ||
         (e.bodyPartZh || '').toLowerCase().includes(keyword) ||
+        (e.equipmentZh || '').toLowerCase().includes(keyword) ||
         (e.targetZh || '').toLowerCase().includes(keyword));
     }
     return arr;
+  }
+
+  // 器械清单（用于筛选，常用在前）
+  function equipList() {
+    const set = new Set(window.AppData.all().map((e) => e.equipmentZh).filter(Boolean));
+    const ORDER = ['自重', '哑铃', '杠铃', '壶铃', '弹力带', '绳索', '史密斯机'];
+    return ORDER.filter((q) => set.has(q)).concat(Array.from(set).filter((q) => !ORDER.includes(q)));
   }
 
   function cardHtml(ex) {
@@ -257,7 +280,7 @@
     if (field === 'sets') it.sets = Math.max(1, it.sets + delta);
     else if (field === 'reps') it.reps = Math.min(50, Math.max(1, it.reps + delta));
     else if (field === 'work') it.workSec = Math.min(120, Math.max(5, it.workSec + delta));
-    else if (field === 'rest') it.restSec = Math.min(120, Math.max(5, it.restSec + delta));
+    else if (field === 'rest') it.restSec = Math.min(30, Math.max(5, it.restSec + delta));
     savePlan(); renderCustomPlan();
   }
   function setMode(id, mode) {

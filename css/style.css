@@ -76,6 +76,8 @@ body {
   border: 1px solid var(--line); color: var(--text-dim); font-size: 13px; cursor: pointer; white-space: nowrap;
 }
 .chip.active { background: var(--accent); color: #04210f; border-color: var(--accent); font-weight: 700; }
+.filter-block { margin-top: 10px; }
+.filter-label { font-size: 12px; color: var(--text-dim); margin: 0 0 0 2px; padding-top: 4px; }
 
 /* 动作卡片 */
 .list { display: flex; flex-direction: column; gap: var(--gap); margin-top: 12px; }

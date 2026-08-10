@@ -27,7 +27,7 @@ window.TrainerPlayer = (function () {
       if (ss.paused) ss.resume();
       if (cancelFirst) ss.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'zh-CN'; u.rate = 1.0; u.pitch = 1.0;
+      u.lang = 'zh-CN'; u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0;
       ss.speak(u);
     } catch (e) {}
   }
@@ -117,7 +117,7 @@ window.TrainerPlayer = (function () {
           <div class="player-controls">
             <button class="pc-btn" id="pauseBtn">${paused ? '▶ 继续' : '⏸ 暂停'}</button>
             <button class="pc-btn" id="skipBtn">跳过 ⏭</button>
-            <button class="pc-btn primary big" id="doneBtn">✓ 完成这组</button>
+            <button class="pc-btn primary big" id="doneBtn">✓ 完成</button>
           </div>
           <button class="ghost-btn" id="stopBtn">结束训练</button>
         </div>`;
@@ -275,6 +275,16 @@ window.TrainerPlayer = (function () {
   async function start(planItems, mountEl, finishCb) {
     container = mountEl;
     onFinish = finishCb;
+    // 移动端(iOS/Android)：必须在用户手势内先"解锁"语音引擎，否则开始后首句静音
+    try {
+      if (window.speechSynthesis) {
+        const ss = window.speechSynthesis;
+        const u = new SpeechSynthesisUtterance(' ');
+        u.volume = 0; u.lang = 'zh-CN'; u.rate = 1; u.pitch = 1;
+        ss.speak(u);
+        setTimeout(() => { try { ss.cancel(); } catch (e) {} }, 80);
+      }
+    } catch (e) {}
     segments = buildSegments(planItems);
     idx = 0; paused = false; pauseStart = 0; repDone = 0;
     if (!segments.length) { renderDone(); return; }
