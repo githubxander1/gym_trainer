@@ -2,11 +2,8 @@
 window.PRESET_PLANS = [
   {
     "id": "mon-push",
-    "name": "周一·推日（胸/肩/三头）",
-    "tags": [
-      "增肌",
-      "推"
-    ],
+    "name": "周一 · 胸·肩·手臂",
+    "tags": [],
     "level": "新手",
     "intro": "主攻推类肌群：胸 + 肩前束 + 三头。用健身房一体机做杠铃卧推，哑铃雕细节，折叠椅做臂屈伸。",
     "warmup": [
@@ -94,11 +91,8 @@ window.PRESET_PLANS = [
   },
   {
     "id": "wed-pull",
-    "name": "周三·拉日（背/二头）+ 核心",
-    "tags": [
-      "增肌",
-      "拉"
-    ],
+    "name": "周三 · 背·臂·核心",
+    "tags": [],
     "level": "新手",
     "intro": "主攻拉类肌群：背阔 + 二头 + 核心。一体机引体/划船/高位下拉，再加平板支撑转体练核心。",
     "warmup": [
@@ -174,11 +168,8 @@ window.PRESET_PLANS = [
   },
   {
     "id": "fri-legs",
-    "name": "周五·腿臀日（腿/臀/核心）",
-    "tags": [
-      "增肌",
-      "腿臀"
-    ],
+    "name": "周五 · 腿·臀",
+    "tags": [],
     "level": "新手",
     "intro": "主攻下肢：股四 + 臀 + 小腿 + 核心。杠铃深蹲打底，臀桥练臀，提踵练小腿。",
     "warmup": [
@@ -271,10 +262,7 @@ window.PRESET_PLANS = [
   {
     "id": "cardio-hiit",
     "name": "有氧燃脂（HIIT）",
-    "tags": [
-      "有氧",
-      "减脂"
-    ],
+    "tags": [],
     "level": "新手",
     "intro": "高心率循环：计时动作为主，短休息多组次，提升心肺与燃脂。热身可慢跑 2 分钟。",
     "warmup": [
@@ -359,12 +347,9 @@ window.PRESET_PLANS = [
   {
     "id": "bodyweight",
     "name": "徒手健身（全身自重）",
-    "tags": [
-      "徒手",
-      "全身"
-    ],
+    "tags": [],
     "level": "新手",
-    "intro": "不用器械，靠自重覆盖全身。适合在家或出差。引体可用门框杆或弹力带辅助。",
+    "intro": "不用任何器械，纯靠自重覆盖全身。适合在家、出差或户外，随时随地开练。",
     "warmup": [
       {
         "kind": "stretch",
@@ -385,10 +370,10 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "1429",
+        "exId": "0675",
         "sets": 3,
         "mode": "rep",
-        "reps": 8,
+        "reps": 15,
         "workSec": 30,
         "restSec": 30
       },
@@ -483,10 +468,7 @@ window.PRESET_PLANS = [
   {
     "id": "dumbbell",
     "name": "哑铃健身（全身哑铃）",
-    "tags": [
-      "哑铃",
-      "全身"
-    ],
+    "tags": [],
     "level": "新手",
     "intro": "一对哑铃练遍全身：下肢 + 推 + 拉 + 核心。居家或健身房都适用。",
     "warmup": [
@@ -596,14 +578,11 @@ window.PRESET_PLANS = [
     ]
   },
   {
-    "id": "ladies",
-    "name": "女士塑形（臀腿/核心/上肢）",
-    "tags": [
-      "女士",
-      "臀腿"
-    ],
+    "id": "home-tone",
+    "name": "居家哑铃塑形",
+    "tags": [],
     "level": "新手",
-    "intro": "适中强度，侧重臀腿线条、核心稳定与上肢紧致。哑铃重量适中即可。",
+    "intro": "适中强度，侧重臀腿线条、核心稳定与上肢紧致。哑铃重量适中即可，居家即可完成。",
     "warmup": [
       {
         "kind": "stretch",
@@ -706,67 +685,6 @@ window.PRESET_PLANS = [
         "desc": "手腕拉伸放松",
         "dur": 20,
         "exId": "0721"
-      }
-    ]
-  },
-  {
-    "id": "pelvic",
-    "name": "盆底与性能力强化",
-    "tags": [
-      "凯格尔",
-      "盆底"
-    ],
-    "level": "专项",
-    "intro": "围绕盆底肌（凯格尔）安排，主打「盆底激活 → 协同肌群唤醒」。无需器械，随时可练。",
-    "warmup": [
-      {
-        "kind": "stretch",
-        "name": "骨盆前后倾激活",
-        "desc": "站立缓慢做骨盆前倾↔后倾 15 次，唤醒盆底与核心",
-        "dur": 60
-      }
-    ],
-    "items": [
-      {
-        "kind": "stretch",
-        "name": "凯格尔·快速收缩",
-        "desc": "收紧盆底肌后立即放松，快收快放 ×15 次",
-        "dur": 60
-      },
-      {
-        "kind": "stretch",
-        "name": "凯格尔·慢速保持",
-        "desc": "收紧保持 5 秒 → 放松 5 秒，重复 ×10 次",
-        "dur": 90
-      },
-      {
-        "kind": "stretch",
-        "name": "站立骨盆倾斜",
-        "desc": "站立位缓慢做骨盆前倾↔后倾 ×15，唤醒盆底与核心",
-        "dur": 90
-      },
-      {
-        "kind": "stretch",
-        "name": "骨盆倾斜",
-        "desc": "仰卧屈膝，腰部贴地后放松 ×15",
-        "dur": 90
-      },
-      {
-        "kind": "exercise",
-        "exId": "3013",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 15,
-        "workSec": 30,
-        "restSec": 15
-      }
-    ],
-    "cooldown": [
-      {
-        "kind": "stretch",
-        "name": "骨盆放松摆动",
-        "desc": "站立或仰卧，轻柔摆动骨盆 30 秒",
-        "dur": 30
       }
     ]
   }
