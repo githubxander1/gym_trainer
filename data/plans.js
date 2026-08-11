@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "新手",
-    "intro": "主攻推类肌群：胸 + 肩前束 + 三头。用健身房一体机做杠铃卧推，哑铃雕细节，折叠椅做臂屈伸。",
+    "intro": "主攻推类肌群：上胸 + 中胸 + 肩前/中束 + 三头。用健身房一体机做杠铃卧推，哑铃雕细节，折叠椅做臂屈伸，最后钻石俯卧撑收尾。",
     "warmup": [
       {
         "kind": "stretch",
@@ -32,6 +32,15 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
+        "exId": "0314",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
         "exId": "0308",
         "sets": 3,
         "mode": "rep",
@@ -50,6 +59,15 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
+        "exId": "0414",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
         "exId": "0129",
         "sets": 3,
         "mode": "rep",
@@ -60,6 +78,15 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0199",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0283",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -94,7 +121,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "新手",
-    "intro": "主攻拉类肌群：背阔 + 二头 + 核心。一体机引体/划船/高位下拉，再加平板支撑转体练核心。",
+    "intro": "主攻拉类肌群：背阔 + 背厚度 + 二头 + 后束 + 核心。一体机引体/划船/高位下拉，加单臂划船纠正左右失衡，反向飞鸟平衡推日，再加平板支撑转体练核心。",
     "warmup": [
       {
         "kind": "stretch",
@@ -133,7 +160,34 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
+        "exId": "0292",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0383",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
         "exId": "0294",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0312",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -171,7 +225,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "新手",
-    "intro": "主攻下肢：股四 + 臀 + 小腿 + 核心。杠铃深蹲打底，臀桥练臀，提踵练小腿。",
+    "intro": "主攻下肢：股四 + 臀 + 腘绳肌 + 小腿 + 核心。杠铃深蹲打底，臀桥练臀，箭步蹲与单腿动作雕线条，躺姿腿弯举孤立腘绳肌，提踵练小腿。",
     "warmup": [
       {
         "kind": "stretch",
@@ -202,6 +256,24 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0434",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0336",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0586",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
