@@ -290,17 +290,11 @@
     view.innerHTML = `
       <div class="section-title">计划库（点开看详情）</div>
       <div class="chips" id="tagChips">${chips}</div>
-      <button class="ghost-btn" id="importBtn">⬇ 导入计划（JSON）</button>
-      <div class="plan-list">${html}</div>
-      <input type="file" id="importFile" accept="application/json" style="display:none" />`;
+      <div class="plan-list">${html}</div>`;
 
     view.querySelectorAll('#tagChips .chip').forEach((c) => { c.onclick = () => { filterTag = c.dataset.tag; renderPlanList(); }; });
     view.querySelectorAll('.plan-card[data-plan]').forEach((c) => { c.onclick = () => openPlan(c.dataset.plan, c.dataset.preset === '1'); });
     bindSwipe();
-    const imp = view.querySelector('#importBtn');
-    const file = view.querySelector('#importFile');
-    imp.onclick = () => file.click();
-    file.onchange = (e) => { if (e.target.files && e.target.files[0]) importPlan(e.target.files[0]); };
   }
   function planHasTag(t) {
     return (window.PRESET_PLANS || []).some((p) => (p.tags || []).includes(t)) || myPlans.some((p) => (p.tags || []).includes(t));
@@ -423,8 +417,7 @@
       ${section('热身', 'warmup', plan.warmup, `<button class="add-stretch" data-to="warmup">＋ 添加热身拉伸</button>`)}
       ${section('动作', 'items', plan.items, `<button class="add-stretch" data-to="items">＋ 去动作库添加动作</button>`)}
       ${section('放松拉伸', 'cooldown', plan.cooldown, `<button class="add-stretch" data-to="cooldown">＋ 添加放松拉伸</button>`)}
-      <button class="primary-btn" id="startBtn">▶ 开始跟练</button>
-      <button class="ghost-btn" id="exportBtn">⬆ 导出此计划（JSON）</button>`;
+      <button class="primary-btn" id="startBtn">▶ 开始跟练</button>`;
 
     document.getElementById('backBtn').onclick = () => { planView = 'list'; renderPlanList(); };
     document.getElementById('epName').oninput = (e) => { plan.name = e.target.value; saveMyPlans(); };
@@ -446,7 +439,6 @@
     bindEditRows(plan);
     document.getElementById('startBtn').onclick = () => startTraining(plan);
     document.getElementById('epDel').onclick = () => deletePlan(plan.id);
-    document.getElementById('exportBtn').onclick = () => exportPlan(plan);
   }
 
   function editRowHtml(plan, key, it, i) {
@@ -531,33 +523,6 @@
       plan[to].push({ kind: 'stretch', name, desc: mask.querySelector('#stDesc').value.trim(), dur });
       saveMyPlans(); mask.remove(); renderPlanEdit(plan);
     };
-  }
-
-  // ---------- 导入 / 导出 ----------
-  function exportPlan(plan) {
-    const data = JSON.stringify(plan, null, 2);
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url; a.download = (plan.name || 'plan') + '.json';
-    document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-  function importPlan(file) {
-    const reader = new FileReader();
-    reader.onload = () => {
-      try {
-        const obj = JSON.parse(reader.result);
-        if (!obj || !Array.isArray(obj.items)) { alert('文件格式不对'); return; }
-        obj.id = uid(); obj.name = obj.name || '导入的计划';
-        obj.tags = obj.tags || []; obj.note = obj.note || '';
-        obj.warmup = obj.warmup || []; obj.cooldown = obj.cooldown || [];
-        myPlans.push(obj); saveMyPlans(); updateBadge();
-        toast('已导入「' + obj.name + '」');
-        renderPlanList();
-      } catch (e) { alert('解析失败：' + e.message); }
-    };
-    reader.readAsText(file);
   }
 
   // ---------- 跟练 ----------

@@ -23,39 +23,12 @@ window.PRESET_PLANS = [
     "items": [
       {
         "kind": "exercise",
-        "exId": "0025",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0314",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
         "exId": "0308",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0301",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
+        "restSec": 25
       },
       {
         "kind": "exercise",
@@ -64,16 +37,7 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0414",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 30
+        "restSec": 25
       },
       {
         "kind": "exercise",
@@ -81,6 +45,24 @@ window.PRESET_PLANS = [
         "sets": 3,
         "mode": "rep",
         "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0199",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "1738",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
         "workSec": 30,
         "restSec": 25
       },
@@ -95,21 +77,39 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0199",
+        "exId": "0414",
         "sets": 3,
         "mode": "rep",
-        "reps": 12,
+        "reps": 10,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 35
       },
       {
         "kind": "exercise",
-        "exId": "0283",
+        "exId": "0301",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 40
+      },
+      {
+        "kind": "exercise",
+        "exId": "0314",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 40
+      },
+      {
+        "kind": "exercise",
+        "exId": "0025",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 55
       }
     ],
     "cooldown": [
@@ -151,39 +151,12 @@ window.PRESET_PLANS = [
     "items": [
       {
         "kind": "exercise",
-        "exId": "0651",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0234",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 15,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0292",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
         "exId": "0294",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 30
       },
       {
         "kind": "exercise",
@@ -192,14 +165,14 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 30
       },
       {
         "kind": "exercise",
-        "exId": "0271",
-        "sets": 4,
+        "exId": "0211",
+        "sets": 3,
         "mode": "rep",
-        "reps": 15,
+        "reps": 20,
         "workSec": 30,
         "restSec": 25
       },
@@ -210,7 +183,43 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0234",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "0292",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "0027",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 50
+      },
+      {
+        "kind": "exercise",
+        "exId": "0651",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 45
       }
     ],
     "cooldown": [
@@ -234,7 +243,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀日：股四 + 臀 + 腘绳肌 + 小腿 + 核心。徒手深蹲 100 次作耐力收尾（不用杠铃），直腿/单腿硬拉与箭步蹲雕线条，单侧硬拉替代机器腿弯举，臀桥练臀，提踵只留一个负重。",
+    "intro": "腿臀日：股四 + 臀 + 腘绳肌 + 小腿 + 核心。哑铃高脚杯深蹲 100 次（轻哑铃高次）作耐力收尾，直腿/单腿硬拉与箭步蹲雕线条，单侧硬拉替代机器腿弯举，臀桥练臀，提踵只留一个负重。动作按先易后难排列，越难休息越长。",
     "warmup": [
       {
         "kind": "stretch",
@@ -244,51 +253,6 @@ window.PRESET_PLANS = [
       }
     ],
     "items": [
-      {
-        "kind": "exercise",
-        "exId": "0434",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0336",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "3769",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "3013",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 15,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "1757",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
       {
         "kind": "exercise",
         "exId": "0417",
@@ -309,12 +273,57 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "9001",
+        "exId": "3013",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "3769",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0434",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "1757",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "1760",
         "sets": 5,
         "mode": "rep",
         "reps": 20,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 40
+      },
+      {
+        "kind": "exercise",
+        "exId": "0336",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 40
       }
     ],
     "cooldown": [
@@ -556,7 +565,7 @@ window.PRESET_PLANS = [
       {
         "kind": "stretch",
         "name": "动态激活",
-        "desc": "肩部环绕 + 徒手深蹲空杆感 2 分钟",
+        "desc": "肩部环绕 + 徒手深蹲感 2 分钟",
         "dur": 120
       }
     ],
