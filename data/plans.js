@@ -4,8 +4,8 @@ window.PRESET_PLANS = [
     "id": "mon-push",
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
-    "level": "新手",
-    "intro": "主攻推类肌群：上胸 + 中胸 + 肩前/中束 + 三头。用健身房一体机做杠铃卧推，哑铃雕细节，折叠椅做臂屈伸，最后钻石俯卧撑收尾。",
+    "level": "进阶",
+    "intro": "推日：胸（上/中/下束）+ 肩三束（前/中/后）+ 三头。一体机杠铃卧推打底，哑铃雕细节；后束放到推日练（绳索站姿后三角肌划船），与周三拉日彻底分开，避免肩背重复。",
     "warmup": [
       {
         "kind": "stretch",
@@ -77,6 +77,15 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
+        "exId": "0233",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
         "exId": "0129",
         "sets": 3,
         "mode": "rep",
@@ -129,8 +138,8 @@ window.PRESET_PLANS = [
     "id": "wed-pull",
     "name": "周三 · 背·臂·核心",
     "tags": [],
-    "level": "新手",
-    "intro": "主攻拉类肌群：背阔 + 背厚度 + 二头 + 后束 + 核心。一体机引体/划船/高位下拉，加单臂划船纠正左右失衡，反向飞鸟平衡推日，再加平板支撑转体练核心。",
+    "level": "进阶",
+    "intro": "拉日：背（垂直拉 + 水平拉）+ 二头 + 核心。彻底不练肩，与周一推日零重叠。引体练背阔，绳索划船 + 单臂划船练背厚度，双弯举练臂，悬垂腿上举练下腹（无单杠可用死虫替代）。",
     "warmup": [
       {
         "kind": "stretch",
@@ -145,41 +154,23 @@ window.PRESET_PLANS = [
         "exId": "0651",
         "sets": 4,
         "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0574",
-        "sets": 4,
-        "mode": "rep",
         "reps": 10,
         "workSec": 30,
         "restSec": 30
       },
       {
         "kind": "exercise",
-        "exId": "0232",
-        "sets": 3,
+        "exId": "0234",
+        "sets": 4,
         "mode": "rep",
-        "reps": 12,
+        "reps": 15,
         "workSec": 30,
         "restSec": 30
       },
       {
         "kind": "exercise",
         "exId": "0292",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0383",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -206,7 +197,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0271",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
@@ -214,12 +205,12 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0464",
+        "exId": "0472",
         "sets": 3,
-        "mode": "time",
+        "mode": "rep",
         "reps": 12,
-        "workSec": 45,
-        "restSec": 20
+        "workSec": 30,
+        "restSec": 25
       }
     ],
     "cooldown": [
@@ -242,8 +233,8 @@ window.PRESET_PLANS = [
     "id": "fri-legs",
     "name": "周五 · 腿·臀",
     "tags": [],
-    "level": "新手",
-    "intro": "主攻下肢：股四 + 臀 + 腘绳肌 + 小腿 + 核心。杠铃深蹲打底，臀桥练臀，箭步蹲与单腿动作雕线条，躺姿腿弯举孤立腘绳肌，提踵练小腿。",
+    "level": "进阶",
+    "intro": "腿臀日：股四 + 臀 + 腘绳肌 + 小腿 + 核心。徒手深蹲 100 次作耐力收尾（不用杠铃），直腿/单腿硬拉与箭步蹲雕线条，单侧硬拉替代机器腿弯举，臀桥练臀，提踵只留一个负重。",
     "warmup": [
       {
         "kind": "stretch",
@@ -253,24 +244,6 @@ window.PRESET_PLANS = [
       }
     ],
     "items": [
-      {
-        "kind": "exercise",
-        "exId": "0102",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "1409",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
       {
         "kind": "exercise",
         "exId": "0434",
@@ -291,15 +264,6 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0586",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
         "exId": "3769",
         "sets": 3,
         "mode": "rep",
@@ -309,12 +273,21 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "1373",
+        "exId": "3013",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "1757",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
       },
       {
         "kind": "exercise",
@@ -333,6 +306,15 @@ window.PRESET_PLANS = [
         "reps": 20,
         "workSec": 30,
         "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "9001",
+        "sets": 5,
+        "mode": "rep",
+        "reps": 20,
+        "workSec": 30,
+        "restSec": 30
       }
     ],
     "cooldown": [

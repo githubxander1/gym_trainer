@@ -27568,5 +27568,23 @@
       "在另一侧重复。",
       "每侧进行 2-4 组。"
     ]
+  },
+  {
+    "id": "9001",
+    "name": "bodyweight squat",
+    "nameZh": "徒手深蹲",
+    "bodyPart": "upper legs",
+    "bodyPartZh": "大腿",
+    "equipment": "body only",
+    "equipmentZh": "徒手",
+    "target": "quadriceps",
+    "targetZh": "股四头肌",
+    "gif": "",
+    "image": "",
+    "stepsZh": [
+      "双脚与肩同宽站立，脚尖微外展。",
+      "屈髋屈膝下蹲，臀部后坐，膝盖朝向脚尖方向，蹲至大腿与地面平行或更低。",
+      "脚跟发力站起回到起始位置，重复至目标次数。"
+    ]
   }
 ]
