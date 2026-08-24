@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "推日：胸（上/中/下束）+ 肩三束（前/中/后）+ 三头。一体机杠铃卧推打底，哑铃雕细节；后束放到推日练（绳索站姿后三角肌划船），与周三拉日彻底分开，避免肩背重复。",
+    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩三束（前/中/后）+ 三头。全部哑铃完成，平板卧推用哑铃替代杠铃；后束用哑铃反向飞鸟（替代绳索），三头用凳臂屈伸+俯身臂屈伸（替代绳索下压与单臂过顶伸展），与周三拉日零重叠。",
     "warmup": [
       {
         "kind": "stretch",
@@ -41,7 +41,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0233",
+        "exId": "0383",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -50,16 +50,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0199",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 25
-      },
-      {
-        "kind": "exercise",
-        "exId": "1738",
+        "exId": "1740",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -104,7 +95,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0025",
+        "exId": "0289",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -139,7 +130,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "拉日：背（垂直拉 + 水平拉）+ 二头 + 核心。彻底不练肩，与周一推日零重叠。引体练背阔，绳索划船 + 单臂划船练背厚度，双弯举练臂，悬垂腿上举练下腹（无单杠可用死虫替代）。",
+    "intro": "拉日（哑铃为主，引体用单杠）：背（垂直拉引体 + 水平拉哑铃划船）+ 二头 + 核心。彻底不练肩，与周一推日零重叠。哑铃俯身划船（双臂）打厚度，单臂划船纠正左右失衡，双弯举练臂，负重俄罗斯转体 + 悬垂腿上举练核心（无单杠可用死虫替代）。",
     "warmup": [
       {
         "kind": "stretch",
@@ -152,7 +143,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0294",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -161,7 +152,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0312",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -169,7 +160,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0211",
+        "exId": "2371",
         "sets": 3,
         "mode": "rep",
         "reps": 20,
@@ -187,7 +178,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0234",
+        "exId": "0293",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -202,15 +193,6 @@ window.PRESET_PLANS = [
         "reps": 12,
         "workSec": 30,
         "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "0027",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 50
       },
       {
         "kind": "exercise",
@@ -243,7 +225,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀日：股四 + 臀 + 腘绳肌 + 小腿 + 核心。哑铃高脚杯深蹲 100 次（轻哑铃高次）作耐力收尾，直腿/单腿硬拉与箭步蹲雕线条，单侧硬拉替代机器腿弯举，臀桥练臀，提踵只留一个负重。动作按先易后难排列，越难休息越长。",
+    "intro": "腿臀日（哑铃+自重组）：股四 + 臀 + 腘绳肌 + 小腿 + 核心。高脚杯深蹲 100 次是股四耐力收尾（不是核心训练，核心在俄罗斯转体）；直腿/单腿硬拉练后链，箭步蹲练单腿，臀桥练臀，提踵只留一个负重。动作先易后难，越难休息越长。",
     "warmup": [
       {
         "kind": "stretch",
@@ -282,15 +264,6 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "3769",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
         "exId": "0434",
         "sets": 3,
         "mode": "rep",
@@ -309,19 +282,19 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "1760",
-        "sets": 5,
-        "mode": "rep",
-        "reps": 20,
-        "workSec": 30,
-        "restSec": 40
-      },
-      {
-        "kind": "exercise",
         "exId": "0336",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "1760",
+        "sets": 5,
+        "mode": "rep",
+        "reps": 20,
         "workSec": 30,
         "restSec": 40
       }
