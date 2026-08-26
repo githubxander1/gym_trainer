@@ -39,6 +39,9 @@ body {
   width: 40px; height: 40px; border-radius: 10px; font-size: 18px; cursor: pointer;
 }
 .icon-btn.off { opacity: .45; }
+.audio-tools { display: flex; align-items: center; gap: 8px; }
+.music-volume { width: 72px; accent-color: var(--accent); }
+.icon-btn.music-off { opacity: .45; }
 
 .view { flex: 1; overflow-y: auto; padding: 16px; padding-bottom: 90px; }
 .view::-webkit-scrollbar { width: 0; }

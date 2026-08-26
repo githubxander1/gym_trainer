@@ -16,7 +16,11 @@
     <!-- 顶部标题栏 -->
     <header class="topbar">
       <div class="brand">练练 <span class="brand-sub">跟练助手</span></div>
-      <button id="soundToggle" class="icon-btn" title="语音口令开关" aria-label="语音口令开关">🔊</button>
+      <div class="audio-tools">
+        <button id="soundToggle" class="icon-btn" title="语音口令开关" aria-label="语音口令开关">🔊</button>
+        <button id="musicToggle" class="icon-btn" title="背景音乐：关闭" aria-label="背景音乐：关闭">🎵</button>
+        <input id="musicVolume" class="music-volume" type="range" min="0" max="0.35" step="0.01" value="0.16" aria-label="背景音乐音量" />
+      </div>
     </header>
 
     <!-- 内容区 -->

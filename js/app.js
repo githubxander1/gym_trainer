@@ -2,6 +2,7 @@
 (function () {
   const LS_MYPLANS = 'lianlian_myplans_v1';
   const LS_SOUND = 'lianlian_sound_v1';
+  const LS_SOUND_MODE = 'lianlian_sound_mode_v1';
 
   const ALL_TAGS = ['增肌', '减脂', '全身', '有氧', '徒手', '哑铃', '女士', '凯格尔', '腿臀', '拉', '推', '盆底'];
 
@@ -20,19 +21,50 @@
   const tabs = document.querySelectorAll('.tab');
   const planBadge = document.getElementById('planBadge');
   const soundBtn = document.getElementById('soundToggle');
+  const musicBtn = document.getElementById('musicToggle');
+  const musicVolume = document.getElementById('musicVolume');
 
-  window.soundOn = localStorage.getItem(LS_SOUND) !== 'off';
+  // 三档提示：口令+音效、仅音效、静音；兼容旧版 soundOn 存储值。
+  const savedSoundMode = localStorage.getItem(LS_SOUND_MODE);
+  window.soundMode = savedSoundMode || (localStorage.getItem(LS_SOUND) === 'off' ? 'off' : 'voice');
+  window.soundOn = window.soundMode !== 'off';
 
   function updateSoundBtn() {
-    soundBtn.textContent = window.soundOn ? '🔊' : '🔇';
-    soundBtn.classList.toggle('off', !window.soundOn);
+    const modes = {
+      voice: { icon: '🗣️', title: '口令+音效（点击切换）' },
+      effect: { icon: '🔊', title: '仅音效（点击切换）' },
+      off: { icon: '🔇', title: '静音（点击切换）' },
+    };
+    const mode = modes[window.soundMode] || modes.voice;
+    soundBtn.textContent = mode.icon;
+    soundBtn.title = mode.title;
+    soundBtn.setAttribute('aria-label', mode.title);
+    soundBtn.classList.toggle('off', window.soundMode === 'off');
   }
   soundBtn.onclick = () => {
-    window.soundOn = !window.soundOn;
+    const next = { voice: 'effect', effect: 'off', off: 'voice' };
+    window.soundMode = next[window.soundMode] || 'voice';
+    window.soundOn = window.soundMode !== 'off';
+    localStorage.setItem(LS_SOUND_MODE, window.soundMode);
     localStorage.setItem(LS_SOUND, window.soundOn ? 'on' : 'off');
     updateSoundBtn();
-    if (!window.soundOn) { try { speechSynthesis.cancel(); } catch (e) {} }
+    if (window.soundMode !== 'voice') { try { speechSynthesis.cancel(); } catch (e) {} }
   };
+
+  function updateMusicBtn() {
+    const state = window.TrainerPlayer.getMusicState();
+    musicBtn.textContent = state.enabled ? '🎵' : '🔇';
+    musicBtn.title = state.enabled ? `背景音乐：${state.track}（点击切换曲目）` : '背景音乐：关闭（点击开启）';
+    musicBtn.setAttribute('aria-label', musicBtn.title);
+    musicBtn.classList.toggle('music-off', !state.enabled);
+    musicVolume.value = state.volume;
+  }
+  musicBtn.onclick = () => {
+    window.TrainerPlayer.cycleMusic();
+    updateMusicBtn();
+  };
+  musicVolume.oninput = () => window.TrainerPlayer.setMusicVolume(musicVolume.value);
+  updateMusicBtn();
 
   // ---------- 存储 ----------
   function saveMyPlans() { localStorage.setItem(LS_MYPLANS, JSON.stringify(myPlans)); }

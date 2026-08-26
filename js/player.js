@@ -25,15 +25,20 @@ window.TrainerPlayer = (function () {
   let pausedAccum = 0;
   let durTimer = null;
 
+  function voiceOn() { return window.soundOn && (window.soundMode || 'voice') === 'voice'; }
+  function cueOn() { return window.soundOn; }
+
   function speak(text, cancelFirst) {
-    if (!window.soundOn) return;
+    if (!voiceOn()) return;
     try {
       if (!('speechSynthesis' in window)) return;
       const ss = window.speechSynthesis;
       if (ss.paused) ss.resume();
       if (cancelFirst) ss.cancel();
       const u = new SpeechSynthesisUtterance(text);
-      u.lang = 'zh-CN'; u.rate = 1.0; u.pitch = 1.0; u.volume = 1.0;
+      u.lang = 'zh-CN'; u.rate = 1.05; u.pitch = 1.0; u.volume = 1.0;
+      const zhVoice = ss.getVoices().find(v => /^zh(-|_)/i.test(v.lang));
+      if (zhVoice) u.voice = zhVoice;
       ss.speak(u);
     } catch (e) {}
   }
@@ -69,14 +74,82 @@ window.TrainerPlayer = (function () {
     osc.start(t0);
     osc.stop(t0 + durMs / 1000 + 0.03);
   }
+
+  const MUSIC_TRACKS = [
+    { src: 'assets/music/rising-forest.mp3', name: 'Rising Forest' },
+    { src: 'assets/music/techno-fest-vibes.mp3', name: 'Techno Fest Vibes' },
+    { src: 'assets/music/positive-energy.mp3', name: 'Positive Energy' },
+  ];
+  const MUSIC_ENABLED_KEY = 'lianlian_music_v1';
+  const MUSIC_VOLUME_KEY = 'lianlian_music_volume_v1';
+  let musicAudio = null;
+  let musicIndex = 0;
+  let musicEnabled = localStorage.getItem(MUSIC_ENABLED_KEY) !== 'off';
+  let musicVolume = Number(localStorage.getItem(MUSIC_VOLUME_KEY));
+  if (!Number.isFinite(musicVolume)) musicVolume = 0.16;
+
+  function ensureMusic() {
+    if (!musicAudio) {
+      musicAudio = new Audio();
+      musicAudio.preload = 'auto';
+      musicAudio.addEventListener('ended', () => {
+        musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
+        musicAudio.src = MUSIC_TRACKS[musicIndex].src;
+        playMusic();
+      });
+    }
+    return musicAudio;
+  }
+  function playMusic() {
+    if (!musicEnabled) return;
+    const audio = ensureMusic();
+    if (!audio.src) audio.src = MUSIC_TRACKS[musicIndex].src;
+    audio.volume = musicVolume;
+    audio.play().catch(() => {});
+  }
+  function pauseMusic() { if (musicAudio) musicAudio.pause(); }
+  function stopMusic() {
+    if (!musicAudio) return;
+    musicAudio.pause();
+    musicAudio.currentTime = 0;
+  }
+  function setMusicEnabled(on) {
+    musicEnabled = !!on;
+    localStorage.setItem(MUSIC_ENABLED_KEY, musicEnabled ? 'on' : 'off');
+    if (musicEnabled) playMusic(); else pauseMusic();
+  }
+  function setMusicVolume(value) {
+    musicVolume = Math.max(0, Math.min(0.35, Number(value) || 0));
+    localStorage.setItem(MUSIC_VOLUME_KEY, String(musicVolume));
+    if (musicAudio) musicAudio.volume = musicVolume;
+  }
+  function nextMusic() {
+    musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
+    if (musicAudio) {
+      musicAudio.src = MUSIC_TRACKS[musicIndex].src;
+      if (musicEnabled) playMusic();
+    }
+    return MUSIC_TRACKS[musicIndex].name;
+  }
+  function cycleMusic() {
+    if (!musicEnabled) {
+      musicIndex = 0;
+      setMusicEnabled(true);
+    } else if (musicIndex >= MUSIC_TRACKS.length - 1) {
+      setMusicEnabled(false);
+    } else {
+      nextMusic();
+    }
+    return { enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name };
+  }
   // 不同场景用不同音效区分
   const Cue = {
-    start() { if (!window.soundOn) return; tone(880, 170, 0, 'sine', 1.0); tone(1320, 170, 0, 'sine', 0.35); },
-    repTick() { if (!window.soundOn) return; tone(1175, 60, 0, 'triangle', 0.9); },
-    setComplete() { if (!window.soundOn) return; tone(880, 150, 0, 'sine', 0.95); tone(1175, 280, 120, 'sine', 0.95); },
-    restStart() { if (!window.soundOn) return; tone(587.33, 340, 0, 'sine', 0.9); },
-    count3() { if (!window.soundOn) return; tone(987.77, 90, 0, 'square', 0.9); tone(1174.66, 90, 140, 'square', 0.9); tone(1318.51, 100, 280, 'square', 0.9); },
-    workoutComplete() { if (!window.soundOn) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 230, i * 150, 'triangle', 0.95)); }
+    start() { if (!cueOn()) return; tone(880, 170, 0, 'sine', 1.0); tone(1320, 170, 180, 'sine', 0.4); },
+    repTick() { if (!cueOn()) return; tone(1175, 75, 0, 'triangle', 0.95); },
+    setComplete() { if (!cueOn()) return; tone(880, 150, 0, 'sine', 0.95); tone(1175, 280, 140, 'sine', 0.95); },
+    restStart() { if (!cueOn()) return; tone(587.33, 340, 0, 'sine', 0.9); },
+    count3() { if (!cueOn()) return; tone(987.77, 110, 0, 'square', 0.95); tone(1174.66, 110, 150, 'square', 0.95); tone(1318.51, 120, 300, 'square', 0.95); },
+    workoutComplete() { if (!cueOn()) return; [523.25, 659.25, 783.99, 1046.5].forEach((f, i) => tone(f, 230, i * 150, 'triangle', 0.95)); }
   };
 
   async function keepAwake() {
@@ -214,6 +287,7 @@ window.TrainerPlayer = (function () {
   }
 
   function renderDone() {
+    stopMusic();
     const total = totalSteps();
     if (durTimer) { clearInterval(durTimer); durTimer = null; }
     container.innerHTML = `
@@ -321,10 +395,12 @@ window.TrainerPlayer = (function () {
     if (paused) {
       pauseStart = Date.now();
       stopTick(); stopRep();
+      pauseMusic();
       if (b) b.textContent = '▶ 继续';
     } else {
       if (pauseStart) { endTime += (Date.now() - pauseStart); pausedAccum += (Date.now() - pauseStart); }
       if (b) b.textContent = '⏸ 暂停';
+      playMusic();
       const seg = segments[idx];
       if (seg && seg.sec > 0) startTick();
       else if (seg && seg.isRep) startRep();
@@ -338,6 +414,7 @@ window.TrainerPlayer = (function () {
 
   function stop() {
     stopTick(); stopRep(); releaseAwake();
+    stopMusic();
     if (durTimer) { clearInterval(durTimer); durTimer = null; }
     try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
     if (onFinish) onFinish();
@@ -347,6 +424,7 @@ window.TrainerPlayer = (function () {
     container = mountEl;
     onFinish = finishCb;
     ensureAudio();
+    playMusic();
     trainStart = Date.now(); pausedAccum = 0;
     if (durTimer) clearInterval(durTimer);
     durTimer = setInterval(updateDuration, 500);
@@ -363,8 +441,10 @@ window.TrainerPlayer = (function () {
     segments = buildSegments(planObj);
     idx = 0; paused = false; pauseStart = 0; repDone = 0;
     if (!segments.length) { renderDone(); return; }
-    await keepAwake();
     startSegment();
+    // Keep the first cue inside the original button gesture; some browsers
+    // suspend speech/audio after an awaited permission request.
+    await keepAwake();
   }
 
   function fmt(s) {
@@ -375,5 +455,12 @@ window.TrainerPlayer = (function () {
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c])); }
 
-  return { start };
+  return {
+    start,
+    setMusicEnabled,
+    setMusicVolume,
+    nextMusic,
+    cycleMusic,
+    getMusicState: () => ({ enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name }),
+  };
 })();

@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩（前/中/后）+ 三头，纯推。后束交给周三划船顺带练，不在此做反向飞鸟；三头全部双臂完成（凳臂屈伸+俯身双臂三头屈伸+窄握推举），与周三拉日零重叠。",
+    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩（前/中束）+ 三头，先做复合推举，再做孤立和手臂动作。后束安排在周三拉日直接训练；三头全部双臂完成，与周三拉日错开。",
     "warmup": [
       {
         "kind": "stretch",
@@ -23,25 +23,16 @@ window.PRESET_PLANS = [
     "items": [
       {
         "kind": "exercise",
-        "exId": "0308",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 25
-      },
-      {
-        "kind": "exercise",
-        "exId": "0334",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 25
-      },
-      {
-        "kind": "exercise",
         "exId": "0314",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 40
+      },
+      {
+        "kind": "exercise",
+        "exId": "0289",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -59,21 +50,30 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0289",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 55
-      },
-      {
-        "kind": "exercise",
         "exId": "0414",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
         "workSec": 30,
         "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "0308",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0334",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
       },
       {
         "kind": "exercise",
@@ -91,7 +91,7 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 30
       },
       {
         "kind": "exercise",
@@ -130,7 +130,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "拉日（哑铃为主，引体用单杠）：背（垂直拉引体 + 水平拉哑铃划船/上斜划船 + 上拉）+ 二头，纯拉，不练肩、不带核心。哑铃俯身划船（双臂）打厚度，哑铃上斜划船（趴上斜凳）角度不同避免两个俯身划船，引体练宽度，上拉练后链，四个二头变式打满。与周一推日零重叠。",
+    "intro": "拉日（哑铃为主，引体用单杠）：背（垂直拉 + 两种水平拉）+ 后束 + 二头。先做大重量拉动作，再做后束和二头，避免把胸部动作混入拉日。与周一推日错开。",
     "warmup": [
       {
         "kind": "stretch",
@@ -147,7 +147,7 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 10,
         "workSec": 30,
-        "restSec": 45
+        "restSec": 40
       },
       {
         "kind": "exercise",
@@ -169,7 +169,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0375",
+        "exId": "0383",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -234,7 +234,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀日（哑铃+自重组）：股四 + 臀 + 腘绳肌 + 小腿，纯腿臀不带核心。股四用高脚杯深蹲（主）+ 前/后/登阶三种方向弓步 + 侧弓步（内收肌/侧向）覆盖；腘绳肌只留直腿硬拉一个双侧铰链，单腿硬拉台阶支撑作单腿版（4 组练满两腿、练平衡）；臀用低臀桥，小腿只留一个站姿提踵。动作先易后难，越难休息越长。",
+    "intro": "腿臀增肌日（哑铃+自重）：先用侧髋外展和低臀桥低强度激活，再做高脚杯深蹲和罗马尼亚硬拉，随后用后箭步蹲、登阶和侧弓步补足单腿与侧向力量，最后完成提踵。休息控制在 30–40 秒，保持动作质量和连续训练时间。",
     "warmup": [
       {
         "kind": "stretch",
@@ -246,84 +246,75 @@ window.PRESET_PLANS = [
     "items": [
       {
         "kind": "exercise",
+        "exId": "0710",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
         "exId": "3013",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 25
-      },
-      {
-        "kind": "exercise",
-        "exId": "0417",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 15,
-        "workSec": 30,
-        "restSec": 25
+        "restSec": 30
       },
       {
         "kind": "exercise",
         "exId": "1760",
-        "sets": 5,
+        "sets": 4,
         "mode": "rep",
-        "reps": 20,
+        "reps": 12,
         "workSec": 30,
         "restSec": 40
       },
       {
         "kind": "exercise",
-        "exId": "0336",
-        "sets": 3,
+        "exId": "1459",
+        "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 40
       },
       {
         "kind": "exercise",
         "exId": "0381",
         "sets": 3,
         "mode": "rep",
-        "reps": 12,
+        "reps": 10,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 40
       },
       {
         "kind": "exercise",
         "exId": "2796",
         "sets": 3,
         "mode": "rep",
-        "reps": 12,
+        "reps": 10,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 40
       },
       {
         "kind": "exercise",
-        "exId": "3769",
-        "sets": 3,
+        "exId": "0417",
+        "sets": 5,
         "mode": "rep",
-        "reps": 12,
+        "reps": 15,
         "workSec": 30,
         "restSec": 30
       },
       {
         "kind": "exercise",
-        "exId": "0434",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "2805",
+        "exId": "3769",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 30
       }
     ],
     "cooldown": [
