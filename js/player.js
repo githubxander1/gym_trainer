@@ -27,10 +27,67 @@ window.TrainerPlayer = (function () {
 
   function voiceOn() { return window.soundOn && (window.soundMode || 'voice') === 'voice'; }
   function cueOn() { return window.soundOn; }
+  const LOCAL_VOICE = {
+    '1': 'assets/voice/1.wav',
+    '2': 'assets/voice/2.wav',
+    '3': 'assets/voice/3.wav',
+    '4': 'assets/voice/4.wav',
+    '5': 'assets/voice/5.wav',
+    '6': 'assets/voice/6.wav',
+    '7': 'assets/voice/7.wav',
+    '8': 'assets/voice/8.wav',
+    '9': 'assets/voice/9.wav',
+    '10': 'assets/voice/10.wav',
+    '11': 'assets/voice/11.wav',
+    '12': 'assets/voice/12.wav',
+    '13': 'assets/voice/13.wav',
+    '14': 'assets/voice/14.wav',
+    '15': 'assets/voice/15.wav',
+    '16': 'assets/voice/16.wav',
+    '17': 'assets/voice/17.wav',
+    '18': 'assets/voice/18.wav',
+    '19': 'assets/voice/19.wav',
+    '20': 'assets/voice/20.wav',
+    '这组完成': 'assets/voice/complete.wav',
+  };
+  let localVoiceAudio = null;
+
+  function speakLocal(text) {
+    const src = LOCAL_VOICE[text];
+    if (!src) return false;
+    try {
+      if (!localVoiceAudio) localVoiceAudio = new Audio();
+      localVoiceAudio.pause();
+      localVoiceAudio.currentTime = 0;
+      localVoiceAudio.src = src;
+      localVoiceAudio.volume = 1;
+      localVoiceAudio.play().catch(() => {});
+      return true;
+    } catch (e) { return false; }
+  }
+  function primeLocalVoice() {
+    try {
+      if (!localVoiceAudio) localVoiceAudio = new Audio();
+      localVoiceAudio.src = LOCAL_VOICE['1'];
+      localVoiceAudio.volume = 0;
+      const p = localVoiceAudio.play();
+      if (p && p.then) p.then(() => {
+        setTimeout(() => {
+          localVoiceAudio.pause();
+          localVoiceAudio.currentTime = 0;
+          localVoiceAudio.volume = 1;
+        }, 40);
+      }).catch(() => {});
+    } catch (e) {}
+  }
 
   function speak(text, cancelFirst) {
     if (!voiceOn()) return;
     try {
+      if (speakLocal(text)) {
+        if (window.speechSynthesis) window.speechSynthesis.cancel();
+        return;
+      }
       if (!('speechSynthesis' in window)) return;
       const ss = window.speechSynthesis;
       if (ss.paused) ss.resume();
@@ -425,6 +482,7 @@ window.TrainerPlayer = (function () {
     onFinish = finishCb;
     ensureAudio();
     playMusic();
+    if (voiceOn()) primeLocalVoice();
     trainStart = Date.now(); pausedAccum = 0;
     if (durTimer) clearInterval(durTimer);
     durTimer = setInterval(updateDuration, 500);
