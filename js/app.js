@@ -53,8 +53,8 @@
 
   function updateMusicBtn() {
     const state = window.TrainerPlayer.getMusicState();
-    musicBtn.textContent = state.enabled ? '🎵' : '🔇';
-    musicBtn.title = state.enabled ? `背景音乐：${state.track}（点击切换曲目）` : '背景音乐：关闭（点击开启）';
+    musicBtn.textContent = state.enabled ? `🎵${state.index + 1}` : '🔇';
+    musicBtn.title = state.enabled ? `背景音乐 ${state.index + 1}/6：${state.track}（点击切换曲目）` : '背景音乐：关闭（点击开启）';
     musicBtn.setAttribute('aria-label', musicBtn.title);
     musicBtn.classList.toggle('music-off', !state.enabled);
     musicVolume.value = state.volume;

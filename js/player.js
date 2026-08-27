@@ -136,6 +136,9 @@ window.TrainerPlayer = (function () {
     { src: 'assets/music/rising-forest.mp3', name: 'Rising Forest' },
     { src: 'assets/music/techno-fest-vibes.mp3', name: 'Techno Fest Vibes' },
     { src: 'assets/music/positive-energy.mp3', name: 'Positive Energy' },
+    { src: 'assets/music/a-game.mp3', name: 'A Game' },
+    { src: 'assets/music/expressive-courage.mp3', name: 'Expressive Courage' },
+    { src: 'assets/music/super-strong.mp3', name: 'Super Strong' },
   ];
   const MUSIC_ENABLED_KEY = 'lianlian_music_v1';
   const MUSIC_VOLUME_KEY = 'lianlian_music_volume_v1';
@@ -149,11 +152,8 @@ window.TrainerPlayer = (function () {
     if (!musicAudio) {
       musicAudio = new Audio();
       musicAudio.preload = 'auto';
-      musicAudio.addEventListener('ended', () => {
-        musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
-        musicAudio.src = MUSIC_TRACKS[musicIndex].src;
-        playMusic();
-      });
+      // 原生循环不依赖 ended 事件再次调用 play，兼容 Via 的自动播放策略。
+      musicAudio.loop = true;
     }
     return musicAudio;
   }
@@ -197,7 +197,7 @@ window.TrainerPlayer = (function () {
     } else {
       nextMusic();
     }
-    return { enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name };
+    return { enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name, index: musicIndex };
   }
   // 不同场景用不同音效区分
   const Cue = {
@@ -519,6 +519,6 @@ window.TrainerPlayer = (function () {
     setMusicVolume,
     nextMusic,
     cycleMusic,
-    getMusicState: () => ({ enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name }),
+    getMusicState: () => ({ enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name, index: musicIndex }),
   };
 })();
