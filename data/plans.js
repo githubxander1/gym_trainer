@@ -197,7 +197,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0705",
-        "sets": 3,
+        "sets": 4,
         "mode": "time",
         "reps": 12,
         "workSec": 30,
@@ -215,7 +215,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0488",
-        "sets": 3,
+        "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -283,7 +283,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0417",
-        "sets": 4,
+        "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
@@ -310,7 +310,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1757",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 10,
         "workSec": 30,
