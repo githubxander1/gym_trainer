@@ -130,7 +130,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "拉日（哑铃+一体机+单杠）：背（下拉、划船、引体）+ 二头 + 核心。先用可控的绳索下拉进入状态，再穿插二头、腹部和腰背，最后做引体；不把同一部位连续练到力竭。背部复合动作 3–4 组，二头和核心 3 组，超伸展补充竖脊肌。",
+    "intro": "拉日（哑铃+一体机+单杠）：背（垂直拉+水平拉）+ 二头 + 核心。背部保留一个下拉/引体主项和一个划船主项，减少重复；核心覆盖抗伸展、抗旋转和躯干控制，超伸展只作腰背补充。",
     "warmup": [
       {
         "kind": "stretch",
@@ -196,9 +196,9 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0327",
+        "exId": "0705",
         "sets": 3,
-        "mode": "rep",
+        "mode": "time",
         "reps": 12,
         "workSec": 30,
         "restSec": 40
@@ -243,7 +243,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀增肌日（哑铃+自重）：先用侧髋外展和低臀桥激活，再做深蹲和罗马尼亚硬拉，穿插单腿、提踵和侧向动作，避免股四头或臀部连续耗尽。深蹲、硬拉最多休 50 秒，其他动作 40 秒以内。",
+    "intro": "腿臀增肌日（哑铃+自重）：先激活臀部，再做一个双腿蹲、一个髋主导动作，配合侧向和单腿动作补足平面与稳定性。避免把多个弓步/登阶堆在一起；深蹲、硬拉最多休 50 秒，其他动作 40 秒以内。",
     "warmup": [
       {
         "kind": "stretch",
@@ -265,11 +265,11 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
-        "sets": 3,
+        "sets": 4,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 35
       },
       {
         "kind": "exercise",
@@ -301,7 +301,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3769",
-        "sets": 4,
+        "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -309,7 +309,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0381",
+        "exId": "1757",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -318,7 +318,7 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "2796",
+        "exId": "2400",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
