@@ -318,10 +318,10 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "3193",
+        "exId": "3561",
         "sets": 3,
         "mode": "rep",
-        "reps": 10,
+        "reps": 20,
         "workSec": 30,
         "restSec": 45
       }
