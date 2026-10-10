@@ -880,5 +880,217 @@ window.PRESET_PLANS = [
         "dur": 20
       }
     ]
+  },
+  {
+    "id": "abs-tone",
+    "name": "专项 · 腹肌·核心",
+    "tags": [],
+    "level": "进阶",
+    "intro": "腹肌与核心专项日（自重为主，可抱哑铃加重）：覆盖上腹（卷腹）、下腹（反向卷腹/折刀）、抗旋转（死虫/俄罗斯转体）、抗伸展（平板支撑转体）与侧链（侧桥），并配超伸展练下背做平衡，避免只练腹导致骨盆前倾。组间歇 25–40 秒。注意：腹肌显形主要靠体脂（减到 12–15% 才看得清），本计划练的是腹肌力量与围度，不负责减脂。适合放在非腿日空档。",
+    "warmup": [
+      {
+        "kind": "stretch",
+        "name": "核心唤醒",
+        "desc": "猫牛式伸展 + 骨盆后倾 各 1 分钟，唤醒核心与下背",
+        "dur": 90
+      }
+    ],
+    "items": [
+      {
+        "kind": "exercise",
+        "exId": "0271",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0872",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0276",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0687",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 20,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0464",
+        "sets": 3,
+        "mode": "time",
+        "reps": 12,
+        "workSec": 40,
+        "restSec": 20
+      },
+      {
+        "kind": "exercise",
+        "exId": "0705",
+        "sets": 3,
+        "mode": "time",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 40
+      },
+      {
+        "kind": "exercise",
+        "exId": "0488",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0507",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 25
+      }
+    ],
+    "cooldown": [
+      {
+        "kind": "stretch",
+        "name": "腹斜肌拉伸",
+        "desc": "坐姿向一侧侧屈，手臂过头 20 秒",
+        "dur": 20
+      },
+      {
+        "kind": "stretch",
+        "name": "下背部拉伸",
+        "desc": "仰卧抱单膝靠近胸部 20 秒",
+        "dur": 20
+      }
+    ]
+  },
+  {
+    "id": "chest-back",
+    "name": "专项 · 胸·背（哑铃）",
+    "tags": [],
+    "level": "进阶",
+    "intro": "胸背专项密度日（哑铃+健身凳+单杠）：纯胸（上/中/下斜+飞鸟孤立）与纯背（引体拉宽+俯身划船厚度+上斜划船变式+单臂划船纠偏）交替，避开肩与手臂，把容量集中到两块\"裸露展示肌\"上。胸背互为拮抗肌，可交替组次节省时间、泵感更强。引体需单杠，无杠用哑铃单臂俯身划船替代。复合动作 4 组、孤立 3 组，难的歇 45–50 秒。适合与周一推日/周三拉日错开（如周末密度日）。",
+    "warmup": [
+      {
+        "kind": "stretch",
+        "name": "肩部环绕",
+        "desc": "双臂前后画圈各 15 次，激活肩袖",
+        "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "胸椎活动",
+        "desc": "双手抱头肘部开合，活动胸椎 30 秒",
+        "dur": 30
+      }
+    ],
+    "items": [
+      {
+        "kind": "exercise",
+        "exId": "0314",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 50
+      },
+      {
+        "kind": "exercise",
+        "exId": "0289",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 50
+      },
+      {
+        "kind": "exercise",
+        "exId": "0301",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 45
+      },
+      {
+        "kind": "exercise",
+        "exId": "0308",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0651",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 8,
+        "workSec": 30,
+        "restSec": 50
+      },
+      {
+        "kind": "exercise",
+        "exId": "0293",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 45
+      },
+      {
+        "kind": "exercise",
+        "exId": "0327",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "0292",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
+      }
+    ],
+    "cooldown": [
+      {
+        "kind": "stretch",
+        "name": "胸大肌拉伸",
+        "desc": "靠门框或墙，手臂外展贴墙，身体前压 20 秒",
+        "dur": 20
+      },
+      {
+        "kind": "stretch",
+        "name": "背阔肌拉伸",
+        "desc": "双手上举交扣，向一侧侧屈 20 秒",
+        "dur": 20
+      }
+    ]
   }
 ];
