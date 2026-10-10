@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩（前/中束）+ 三头。复合动作优先，但穿插肩部和三头，避免同一部位连续疲劳；复合动作 4 组，孤立动作 3 组。",
+    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩（前/中束）+ 三头。复合动作优先，但穿插肩部和三头，避免同一部位连续疲劳；复合动作 4 组，孤立动作 3 组。安全提示：首个大重量复合动作（上斜卧推）正式组前，先用 50%/70% 重量各做 1 组 8 次递增热身。",
     "warmup": [
       {
         "kind": "stretch",
@@ -60,7 +60,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0301",
-        "sets": 3,
+        "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -92,15 +92,6 @@ window.PRESET_PLANS = [
         "reps": 12,
         "workSec": 30,
         "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0129",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 35
       }
     ],
     "cooldown": [
@@ -130,7 +121,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "拉日（哑铃+一体机+单杠）：背（垂直拉+水平拉）+ 二头 + 核心。背部保留一个下拉/引体主项和一个划船主项，减少重复；核心覆盖抗伸展、抗旋转和躯干控制，超伸展只作腰背补充。",
+    "intro": "拉日（哑铃+一体机+单杠）：背（垂直拉+水平拉）+ 肩后束 + 二头 + 核心。背部保留一个下拉/引体主项和两个不同角度的划船主项；反向飞鸟补肩后束、防圆肩；核心覆盖抗伸展与侧链，超伸展只作腰背补充。安全提示：引体前先做 1 组弹力带/自重减半的递增组。",
     "warmup": [
       {
         "kind": "stretch",
@@ -196,19 +187,28 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0705",
-        "sets": 4,
-        "mode": "time",
+        "exId": "0327",
+        "sets": 3,
+        "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 40
+        "restSec": 35
       },
       {
         "kind": "exercise",
-        "exId": "0687",
+        "exId": "0383",
         "sets": 3,
         "mode": "rep",
-        "reps": 16,
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0705",
+        "sets": 3,
+        "mode": "time",
+        "reps": 12,
         "workSec": 30,
         "restSec": 30
       },
@@ -243,7 +243,7 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀增肌日（哑铃+自重）：先激活臀部，再做一个双腿蹲、一个髋主导动作，配合侧向和单腿动作补足平面与稳定性。避免把多个弓步/登阶堆在一起；深蹲、硬拉最多休 50 秒，其他动作 40 秒以内。",
+    "intro": "腿臀增肌日（哑铃+自重）：先激活臀部，再做一个双腿蹲 + 箭步蹲（股四主导），配 RDL 与单腿硬拉练后链、侧向动作补平面。深蹲、硬拉最多休 50 秒，其他动作 40 秒以内。安全提示：高脚杯深蹲正式组前，先用 50%/70% 重量各做 1 组 10 次递增热身。",
     "warmup": [
       {
         "kind": "stretch",
@@ -265,7 +265,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
-        "sets": 4,
+        "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
@@ -297,6 +297,15 @@ window.PRESET_PLANS = [
         "reps": 12,
         "workSec": 30,
         "restSec": 50
+      },
+      {
+        "kind": "exercise",
+        "exId": "0336",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
       },
       {
         "kind": "exercise",
