@@ -152,8 +152,20 @@ window.TrainerPlayer = (function () {
     if (!musicAudio) {
       musicAudio = new Audio();
       musicAudio.preload = 'auto';
-      // 原生循环不依赖 ended 事件再次调用 play，兼容 Via 的自动播放策略。
-      musicAudio.loop = true;
+      // 不做单曲循环：播完触发 ended 自动切下一首（连续播放）。
+      // 在 ended 回调里换 src 再 play，属于"延续已有播放会话"，各浏览器（含 Via）不会拦。
+      musicAudio.loop = false;
+      musicAudio.addEventListener('ended', () => {
+        if (!musicEnabled) return;
+        musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
+        musicAudio.src = MUSIC_TRACKS[musicIndex].src;
+        musicAudio.volume = musicVolume;
+        musicAudio.play().catch(() => {});
+        if (typeof document !== 'undefined') {
+          const btn = document.getElementById('musicToggle');
+          if (btn) btn.textContent = '🎵' + (musicIndex + 1);
+        }
+      });
     }
     return musicAudio;
   }
