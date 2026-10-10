@@ -777,5 +777,108 @@ window.PRESET_PLANS = [
         "exId": "0721"
       }
     ]
+  },
+  {
+    "id": "arm-tone",
+    "name": "手臂塑形（肱二三头·哑铃）",
+    "tags": [],
+    "level": "进阶",
+    "intro": "手臂孤立细节日（哑铃+健身凳）：先二头（主项→锤式→单侧集中→反握变式），再三头（俯身双臂屈伸→窄握推举→凳臂屈伸自重）。手臂围度约三分之二来自三头，因此补足三头块。二头小肌群组间歇 25–30 秒，三头复合动作歇 30–35 秒。适合放在推/拉/腿之外的空档（如周六），别紧贴周一推日或周三拉日。",
+    "warmup": [
+      {
+        "kind": "stretch",
+        "name": "肩部环绕",
+        "desc": "双臂前后画圈各 15 次，激活肩袖",
+        "dur": 60
+      }
+    ],
+    "items": [
+      {
+        "kind": "exercise",
+        "exId": "0294",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0312",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0297",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "0382",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 25
+      },
+      {
+        "kind": "exercise",
+        "exId": "1741",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "0296",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 35
+      },
+      {
+        "kind": "exercise",
+        "exId": "0129",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 30
+      },
+      {
+        "kind": "exercise",
+        "exId": "2398",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 30
+      }
+    ],
+    "cooldown": [
+      {
+        "kind": "stretch",
+        "name": "三头肌拉伸",
+        "desc": "单臂过头顶屈肘，另一手轻压肘 20 秒",
+        "dur": 20
+      },
+      {
+        "kind": "stretch",
+        "name": "二头肌拉伸",
+        "desc": "双臂伸直外旋向后，掌心朝外靠墙 20 秒",
+        "dur": 20
+      }
+    ]
   }
 ];
