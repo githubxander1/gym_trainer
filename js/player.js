@@ -250,22 +250,29 @@ window.TrainerPlayer = (function () {
     return segs;
   }
 
-  // ---------- 总进度（按"段"） ----------
-  function totalSteps() { return segments.length; }
+  // ---------- 总进度（只统计真正的训练组，排除热身/拉伸/组间休息） ----------
+  function totalSteps() { return segments.filter(s => s.type === 'work').length; }
   function stepProgress() {
-    const total = totalSteps();
-    const current = Math.min(idx + 1, total);
-    return { done: idx, total, current };
+    let done = 0, current = 0;
+    for (let i = 0; i < segments.length; i++) {
+      if (segments[i].type !== 'work') continue;
+      if (i < idx) done++;
+      if (i <= idx) current++;
+    }
+    return { done, total: totalSteps(), current };
   }
   function getElapsed() { return Math.max(0, Math.floor((Date.now() - trainStart - pausedAccum) / 1000)); }
   function updateDuration() { const el = document.getElementById('durText'); if (el) el.textContent = '⏱ ' + fmt(getElapsed()); }
+  function stepLabel(total, current) {
+    return (current === 0 && total > 0) ? '热身 / 拉伸' : ('第 ' + current + ' / ' + total + ' 组');
+  }
   function progressHtml() {
     const { done, total, current } = stepProgress();
     const pct = total ? (done / total * 100) : 0;
     return `<div class="progress-wrap">
       <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:${pct}%"></div></div>
       <div class="progress-meta">
-        <span class="progress-label" id="progLabel">第 ${current} / ${total} 步</span>
+        <span class="progress-label" id="progLabel">${stepLabel(total, current)}</span>
         <span class="duration" id="durText">⏱ ${fmt(getElapsed())}</span>
       </div>
     </div>`;
@@ -273,7 +280,7 @@ window.TrainerPlayer = (function () {
   function updateProgress() {
     const { done, total, current } = stepProgress();
     const f = document.getElementById('progFill'); if (f) f.style.width = (total ? done / total * 100 : 0) + '%';
-    const l = document.getElementById('progLabel'); if (l) l.textContent = `第 ${current} / ${total} 步`;
+    const l = document.getElementById('progLabel'); if (l) l.textContent = stepLabel(total, current);
   }
 
   // ---------- 渲染 ----------
@@ -351,11 +358,11 @@ window.TrainerPlayer = (function () {
       <div class="player done">
         <div class="progress-wrap">
           <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-          <div class="progress-label">第 ${total} / ${total} 步 · 全部完成</div>
+          <div class="progress-label">第 ${total} / ${total} 组 · 全部完成</div>
         </div>
         <div class="done-emoji">🎉</div>
         <div class="done-title">训练完成！</div>
-        <div class="done-sub">本次共 ${total} 步 · 用时 ${fmt(getElapsed())}</div>
+        <div class="done-sub">本次共 ${total} 组 · 用时 ${fmt(getElapsed())}</div>
         <button class="primary-btn" id="backBtn">返回</button>
       </div>`;
     document.getElementById('backBtn').onclick = () => { if (onFinish) onFinish(); };
