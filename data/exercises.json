@@ -27568,5 +27568,25 @@
       "在另一侧重复。",
       "每侧进行 2-4 组。"
     ]
+  },
+  {
+    "id": "local-bird-dog",
+    "name": "bird dog",
+    "nameZh": "鸟狗式",
+    "bodyPart": "waist",
+    "bodyPartZh": "腰腹",
+    "equipment": "body weight",
+    "equipmentZh": "自重",
+    "target": "core",
+    "targetZh": "核心稳定",
+    "gif": "assets/bird-dog.svg",
+    "image": "assets/bird-dog.svg",
+    "stepsZh": [
+      "四点跪姿，双手在肩下，双膝在髋下，保持脊柱自然位置。",
+      "收紧腹部，缓慢伸出左手与右腿，使其接近躯干高度。",
+      "保持骨盆朝地面，避免塌腰或扭转，短暂停顿。",
+      "缓慢收回，再伸出右手与左腿，左右交替。",
+      "每伸出并收回一组对侧手脚算 1 次；左右各 6 次为总共 12 次。"
+    ]
   }
 ]

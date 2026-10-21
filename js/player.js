@@ -145,68 +145,139 @@ window.TrainerPlayer = (function () {
   let musicAudio = null;
   let musicIndex = 0;
   let musicEnabled = localStorage.getItem(MUSIC_ENABLED_KEY) !== 'off';
-  let musicVolume = Number(localStorage.getItem(MUSIC_VOLUME_KEY));
+  const savedMusicVolume = localStorage.getItem(MUSIC_VOLUME_KEY);
+  let musicVolume = savedMusicVolume === null ? 0.16 : Number(savedMusicVolume);
   if (!Number.isFinite(musicVolume)) musicVolume = 0.16;
+  musicVolume = Math.max(0, Math.min(0.35, musicVolume));
+  let musicWanted = false;
+  let musicSwitching = false;
+  let musicVersion = 0;
+  let musicPendingVersion = -1;
+  let musicFailedVersion = -1;
+  let musicFailures = 0;
+  let musicMessage = '';
+
+  function notifyMusic() { window.dispatchEvent(new Event('trainer-music-change')); }
+
+  function musicFailed(version, error) {
+    if (version !== musicVersion || !musicWanted || !musicEnabled) return;
+    if (error && error.name === 'AbortError') return; // load/换曲导致的旧播放请求取消。
+    if (error && error.name === 'NotAllowedError') {
+      musicMessage = '浏览器暂停了音乐，请点击音乐按钮继续播放';
+      notifyMusic();
+      return;
+    }
+    if (musicFailedVersion === version) return;
+    musicFailedVersion = version;
+    musicFailures++;
+    if (musicFailures < MUSIC_TRACKS.length) {
+      nextMusic(); // 文件加载或解码失败时尝试下一首，最多一轮。
+    } else {
+      musicWanted = false;
+      musicSwitching = false;
+      musicMessage = '音乐加载失败，请检查网络后点击音乐按钮重试';
+      notifyMusic();
+    }
+  }
+
+  function attemptMusicPlay() {
+    if (!musicWanted || !musicEnabled || musicPendingVersion === musicVersion) return;
+    const version = musicVersion;
+    musicPendingVersion = version;
+    Promise.resolve(musicAudio.play()).catch((error) => musicFailed(version, error)).finally(() => {
+      if (musicPendingVersion === version) musicPendingVersion = -1;
+    });
+  }
+
+  function loadMusicTrack() {
+    const audio = ensureMusic();
+    musicVersion++;
+    musicSwitching = true;
+    musicMessage = '';
+    audio.src = MUSIC_TRACKS[musicIndex].src;
+    audio.volume = musicVolume;
+    audio.load();
+    notifyMusic();
+  }
+
+  function advanceFinishedMusic() {
+    if (musicEnabled && musicWanted && !musicSwitching) nextMusic();
+  }
 
   function ensureMusic() {
     if (!musicAudio) {
       musicAudio = new Audio();
       musicAudio.preload = 'auto';
-      // 不做单曲循环：播完触发 ended 自动切下一首（连续播放）。
-      // 在 ended 回调里换 src 再 play，属于"延续已有播放会话"，各浏览器（含 Via）不会拦。
       musicAudio.loop = false;
-      musicAudio.addEventListener('ended', () => {
-        if (!musicEnabled) return;
-        musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
-        musicAudio.src = MUSIC_TRACKS[musicIndex].src;
-        musicAudio.volume = musicVolume;
-        musicAudio.play().catch(() => {});
-        if (typeof document !== 'undefined') {
-          const btn = document.getElementById('musicToggle');
-          if (btn) btn.textContent = '🎵' + (musicIndex + 1);
-        }
+      musicAudio.addEventListener('ended', advanceFinishedMusic);
+      musicAudio.addEventListener('timeupdate', () => {
+        // 部分移动浏览器末尾不发 ended；以实际播放位置兜底，换曲期间去重。
+        if (Number.isFinite(musicAudio.duration) && musicAudio.duration > 0 &&
+            musicAudio.currentTime >= musicAudio.duration - 0.05) advanceFinishedMusic();
       });
+      musicAudio.addEventListener('canplay', () => {
+        if (!musicMessage && musicAudio.paused) attemptMusicPlay();
+      });
+      musicAudio.addEventListener('playing', () => {
+        if (!musicWanted || !musicEnabled) { musicAudio.pause(); return; }
+        musicSwitching = false;
+        musicFailures = 0;
+        musicMessage = '';
+        notifyMusic();
+      });
+      musicAudio.addEventListener('error', () => musicFailed(musicVersion, musicAudio.error));
     }
     return musicAudio;
   }
   function playMusic() {
     if (!musicEnabled) return;
-    const audio = ensureMusic();
-    if (!audio.src) audio.src = MUSIC_TRACKS[musicIndex].src;
-    audio.volume = musicVolume;
-    audio.play().catch(() => {});
+    musicWanted = true;
+    musicMessage = '';
+    if (!ensureMusic().src) loadMusicTrack();
+    musicAudio.volume = musicVolume;
+    attemptMusicPlay();
   }
-  function pauseMusic() { if (musicAudio) musicAudio.pause(); }
+  function pauseMusic() {
+    musicWanted = false;
+    musicVersion++; // 忽略暂停前尚未完成的 play() 请求。
+    if (musicAudio) musicAudio.pause();
+  }
   function stopMusic() {
+    pauseMusic();
     if (!musicAudio) return;
-    musicAudio.pause();
     musicAudio.currentTime = 0;
   }
   function setMusicEnabled(on) {
     musicEnabled = !!on;
+    musicMessage = '';
     localStorage.setItem(MUSIC_ENABLED_KEY, musicEnabled ? 'on' : 'off');
     if (musicEnabled) playMusic(); else pauseMusic();
+    notifyMusic();
   }
   function setMusicVolume(value) {
     musicVolume = Math.max(0, Math.min(0.35, Number(value) || 0));
     localStorage.setItem(MUSIC_VOLUME_KEY, String(musicVolume));
     if (musicAudio) musicAudio.volume = musicVolume;
+    notifyMusic();
   }
   function nextMusic() {
     musicIndex = (musicIndex + 1) % MUSIC_TRACKS.length;
-    if (musicAudio) {
-      musicAudio.src = MUSIC_TRACKS[musicIndex].src;
-      if (musicEnabled) playMusic();
-    }
+    loadMusicTrack();
+    if (musicWanted && musicEnabled) attemptMusicPlay();
     return MUSIC_TRACKS[musicIndex].name;
   }
   function cycleMusic() {
-    if (!musicEnabled) {
+    if (musicMessage) {
+      musicFailures = 0;
+      loadMusicTrack();
+      playMusic(); // 由明确点击恢复被浏览器拦截的播放，不跳过当前曲。
+    } else if (!musicEnabled) {
       musicIndex = 0;
       setMusicEnabled(true);
     } else if (musicIndex >= MUSIC_TRACKS.length - 1) {
       setMusicEnabled(false);
     } else {
+      musicWanted = true;
       nextMusic();
     }
     return { enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name, index: musicIndex };
@@ -253,13 +324,21 @@ window.TrainerPlayer = (function () {
       const sec = isRep ? 0 : (block.workSec || 30);
       const reps = block.reps || 12;
       for (let s = 1; s <= sets; s++) {
-        segs.push({ type: 'work', ex, set: s, totalSets: sets, sec, reps, isRep });
-        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, totalSets: sets, nextEx: ex });
+        const side = block.sideMode === 'alternatingSets' ? (s % 2 ? '左侧' : '右侧') : '';
+        segs.push({ type: 'work', ex, set: s, totalSets: sets, sec, reps, isRep, side, note: block.note || '', repMs: block.repSec ? block.repSec * 1000 : REP_PACE_MS });
+        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, totalSets: sets, nextEx: ex,
+          side: block.sideMode === 'alternatingSets' ? ((s + 1) % 2 ? '左侧' : '右侧') : '' });
       }
       if (!isLast) segs.push({ type: 'rest', sec: rest, ex, set: 1, totalSets: 1, nextEx: window.AppData.get((blocks[bi + 1] && blocks[bi + 1].exId) || '') });
     });
     if (segs.length && segs[segs.length - 1].type === 'rest') segs.pop();
     return segs;
+  }
+
+  // 与实际跟练使用同一段列表，包含热身、换动作、放松与次数结束提示。
+  function estimatePlanSec(plan) {
+    return buildSegments(plan).reduce((sum, seg) => sum +
+      (seg.isRep ? seg.reps * seg.repMs / 1000 + 0.6 : seg.sec), 0);
   }
 
   // ---------- 总进度（只统计真正的训练组，排除热身/拉伸/组间休息） ----------
@@ -314,8 +393,9 @@ window.TrainerPlayer = (function () {
           <div class="hbar-wrap">
             <div class="hbar-track"><div class="hbar-fill" id="barFill" style="width:${repPct}%"></div></div>
           </div>
-          <div class="phase-sub" id="phaseSub">第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${remain} 次</div>
+          <div class="phase-sub" id="phaseSub">第 ${seg.set}/${seg.totalSets} 组${seg.side ? ' · ' + seg.side : ''} · 共 ${seg.reps} 次 · 还剩 ${remain} 次</div>
           <div class="player-name">${nameZh}</div>
+          ${seg.note ? `<div class="stretch-desc">${esc(seg.note)}</div>` : ''}
           ${ex ? `<img class="player-gif" src="${ex.gif}" alt="" onerror="this.style.display='none'">` : ''}
           <div class="player-controls">
             <button class="pc-btn" id="pauseBtn">${paused ? '▶ 继续' : '⏸ 暂停'}</button>
@@ -338,6 +418,7 @@ window.TrainerPlayer = (function () {
     if (seg.type === 'stretch') setLabel = seg.name;
     else if (seg.type === 'rest') setLabel = seg.mini ? '稍作调整' : `下一组 ${seg.set}/${seg.totalSets} 组`;
     else setLabel = `第 ${seg.set}/${seg.totalSets} 组`;
+    if (seg.side) setLabel += ' · ' + seg.side;
     container.innerHTML = `
       <div class="player">
         ${progressHtml()}
@@ -347,6 +428,7 @@ window.TrainerPlayer = (function () {
         </div>
         <div class="phase-sub" id="phaseSub">${setLabel}</div>
         ${seg.type === 'stretch' && seg.desc ? `<div class="stretch-desc">${esc(seg.desc)}</div>` : ''}
+        ${isWork && seg.note ? `<div class="stretch-desc">${esc(seg.note)}</div>` : ''}
         <div class="player-name">${nameZh}</div>
         ${ex && seg.type !== 'stretch' ? `<img class="player-gif" src="${ex.gif}" alt="" onerror="this.style.display='none'">` : ''}
         <div class="player-controls">
@@ -415,7 +497,7 @@ window.TrainerPlayer = (function () {
       Cue.repTick();
       const el = document.getElementById('repNum'); if (el) el.textContent = repDone;
       const sub = document.getElementById('phaseSub');
-      if (sub) sub.textContent = `第 ${seg.set}/${seg.totalSets} 组 · 共 ${seg.reps} 次 · 还剩 ${Math.max(0, seg.reps - repDone)} 次`;
+      if (sub) sub.textContent = `第 ${seg.set}/${seg.totalSets} 组${seg.side ? ' · ' + seg.side : ''} · 共 ${seg.reps} 次 · 还剩 ${Math.max(0, seg.reps - repDone)} 次`;
       const bar = document.getElementById('barFill');
       if (bar) bar.style.width = (Math.min(1, repDone / seg.reps) * 100) + '%';
       if (repDone >= seg.reps) { speak('这组完成'); Cue.setComplete(); stopRep(); setTimeout(() => next(true), 600); }
@@ -433,13 +515,13 @@ window.TrainerPlayer = (function () {
       if (seg.isRep) {
         repDone = 0;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
+        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，${seg.side ? seg.side + '，' : ''}开始`, true);
         Cue.start();
         startRep();
       } else {
         endTime = Date.now() + seg.sec * 1000;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，开始`, true);
+        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，${seg.side ? seg.side + '，' : ''}开始`, true);
         Cue.start();
         startTick();
       }
@@ -452,7 +534,7 @@ window.TrainerPlayer = (function () {
     } else {
       endTime = Date.now() + seg.sec * 1000;
       render();
-      speak(`休息 ${seg.sec} 秒`, true);
+      speak(`休息 ${seg.sec} 秒${seg.side ? '，下一组' + seg.side : ''}`, true);
       Cue.restStart();
       startTick();
     }
@@ -485,7 +567,7 @@ window.TrainerPlayer = (function () {
 
   function startTick() { stopTick(); tickTimer = setInterval(tick, 200); }
   function stopTick() { if (tickTimer) { clearInterval(tickTimer); tickTimer = null; } }
-  function startRep() { stopRep(); repTimer = setInterval(repTick, REP_PACE_MS); }
+  function startRep() { stopRep(); repTimer = setInterval(repTick, segments[idx].repMs || REP_PACE_MS); }
   function stopRep() { if (repTimer) { clearInterval(repTimer); repTimer = null; } }
 
   function stop() {
@@ -534,10 +616,11 @@ window.TrainerPlayer = (function () {
 
   return {
     start,
+    estimatePlanSec,
     setMusicEnabled,
     setMusicVolume,
     nextMusic,
     cycleMusic,
-    getMusicState: () => ({ enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name, index: musicIndex }),
+    getMusicState: () => ({ enabled: musicEnabled, volume: musicVolume, track: MUSIC_TRACKS[musicIndex].name, index: musicIndex, message: musicMessage }),
   };
 })();

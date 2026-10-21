@@ -53,8 +53,8 @@
 
   function updateMusicBtn() {
     const state = window.TrainerPlayer.getMusicState();
-    musicBtn.textContent = state.enabled ? `🎵${state.index + 1}` : '🔇';
-    musicBtn.title = state.enabled ? `背景音乐 ${state.index + 1}/6：${state.track}（点击切换曲目）` : '背景音乐：关闭（点击开启）';
+    musicBtn.textContent = state.message ? '🎵▶' : (state.enabled ? `🎵${state.index + 1}` : '🔇');
+    musicBtn.title = state.message || (state.enabled ? `背景音乐 ${state.index + 1}/6：${state.track}（点击切换曲目）` : '背景音乐：关闭（点击开启）');
     musicBtn.setAttribute('aria-label', musicBtn.title);
     musicBtn.classList.toggle('music-off', !state.enabled);
     musicVolume.value = state.volume;
@@ -64,6 +64,7 @@
     updateMusicBtn();
   };
   musicVolume.oninput = () => window.TrainerPlayer.setMusicVolume(musicVolume.value);
+  window.addEventListener('trainer-music-change', updateMusicBtn);
   updateMusicBtn();
 
   // ---------- 存储 ----------
@@ -84,25 +85,12 @@
     planBadge.hidden = myPlans.length === 0;
   }
 
-  // ---------- 时长估计（仅正式训练 items，不含热身/放松） ----------
-  function estimateSec(items) {
-    let s = 0;
-    (items || []).forEach((it) => {
-      if (it.kind === 'exercise') {
-        const work = it.mode === 'rep' ? (it.reps || 12) * 3 : (it.workSec || 30);
-        s += (it.sets || 3) * work + Math.max(0, (it.sets || 3) - 1) * (it.restSec || 15);
-      } else {
-        s += (it.dur || 30);
-      }
-    });
-    s += Math.max(0, (items || []).length - 1) * 15;
-    return s;
-  }
+  // ---------- 时长估计：与播放器共用，含热身、放松及动作间休息 ----------
   function planStats(plan) {
     const items = plan.items || [];
     const exCount = items.filter((i) => i.kind === 'exercise').length;
     const groups = items.reduce((s, i) => s + (i.kind === 'exercise' ? (i.sets || 0) : 0), 0);
-    const mins = Math.max(1, Math.round(estimateSec(items) / 60));
+    const mins = Math.max(1, Math.round(window.TrainerPlayer.estimatePlanSec(plan) / 60));
     return { exCount, groups, mins };
   }
 
@@ -393,7 +381,7 @@
       <button class="back-btn" id="backBtn">‹ 计划库</button>
       <div class="pd-head">${tagBadges(plan.tags)}<h2 class="pd-title">${esc(plan.name)}</h2></div>
       ${plan.intro ? `<p class="pd-intro">${esc(plan.intro)}</p>` : ''}
-      <div class="pd-summary">共 ${st.exCount} 动作 · ${st.groups} 组 · 约 ${st.mins} 分钟（正式训练，不含热身/放松）</div>
+      <div class="pd-summary">共 ${st.exCount} 动作 · ${st.groups} 组 · 约 ${st.mins} 分钟（含热身、休息和放松；暂停或手动延长休息另计）</div>
       ${secHtml('热身', plan.warmup)}
       ${secHtml('动作清单', plan.items)}
       ${secHtml('放松拉伸', plan.cooldown)}
@@ -423,7 +411,7 @@
       const ex = window.AppData.get(it.exId);
       const nm = ex ? (ex.nameZh || ex.name) : '?';
       const spec = it.mode === 'rep' ? `${it.sets} 组 · ${it.reps} 次` : `${it.sets} 组 · ${it.workSec}s`;
-      return `<div class="pd-row" data-ex="${it.exId}"><div class="pd-name">${esc(nm)}</div><div class="pd-set">${spec}</div></div>`;
+      return `<div class="pd-row" data-ex="${it.exId}"><div class="pd-name">${esc(nm)}${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}</div><div class="pd-set">${spec}${it.sideMode === 'alternatingSets' ? ' · 左右轮换' : ''} · 休${it.restSec}s</div></div>`;
     }
     return `<div class="pd-row pd-stretch"><div class="pd-name">${esc(it.name)}</div><div class="pd-set">${esc(it.dur || 30)}s</div></div>`;
   }
@@ -488,6 +476,7 @@
           <img class="thumb" src="${ex ? ex.image : ''}" alt="" onerror="this.style.display='none'">
           <div class="info">
             <div class="name">${esc(ex ? (ex.nameZh || ex.name) : '?')}</div>
+            ${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}
             <div class="stepper">
               <button data-act="sets" data-d="-1">−</button><span class="val">${it.sets} 组</span><button data-act="sets" data-d="1">+</button>
               <span class="mode-group">${unitBtn('rep', '次数')}${unitBtn('time', '秒')}</span>
@@ -524,7 +513,7 @@
     });
   }
   function changeItem(it, field, delta) {
-    if (field === 'sets') it.sets = Math.max(1, (it.sets || 3) + delta);
+    if (field === 'sets') it.sets = Math.max(it.sideMode === 'alternatingSets' ? 2 : 1, (it.sets || 3) + delta * (it.sideMode === 'alternatingSets' ? 2 : 1));
     else if (field === 'reps') it.reps = Math.min(50, Math.max(1, (it.reps || 12) + delta));
     else if (field === 'work') it.workSec = Math.min(120, Math.max(5, (it.workSec || 30) + delta));
     else if (field === 'rest') it.restSec = Math.min(30, Math.max(5, (it.restSec || 15) + delta));

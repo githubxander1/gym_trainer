@@ -5,19 +5,25 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "推日（哑铃+健身凳为主）：胸（上/中/下）+ 肩（前/中/后三束）+ 三头。复合动作 4–5 组、孤立动作 3 组，难的动作休息更长。强度指引：复合动作留 1–2 次余力（RPE 8），孤立动作留 2–3 次。安全提示：首个大重量复合动作（上斜卧推）正式组前，先用 50%/70% 重量各做 1 组 8 次递增热身。",
+    "intro": "进阶推日：保留上斜、平板、下斜三个胸部角度，补肩三束与三头。8 个动作、23 组，含热身约 35–40 分钟，以页面预计时长和实际节奏为准。主项留 1–2 次余力，辅助动作留 1–3 次；目标次数全部稳定完成后再小幅加重。若后续组明显掉次数或变形，可增加休息。飞鸟可按训练周期换成哑铃挤压卧推，不同时叠加。",
     "warmup": [
       {
         "kind": "stretch",
-        "name": "肩部环绕",
-        "desc": "双臂前后画圈各 15 次，激活肩袖",
+        "name": "轻松活动",
+        "desc": "快走或轻松原地踏步，让身体逐渐热起来",
         "dur": 60
       },
       {
         "kind": "stretch",
-        "name": "徒手开合臂",
-        "desc": "双臂侧平举开合 20 次",
-        "dur": 30
+        "name": "肩带活动",
+        "desc": "肩部环绕与轻松开合臂，不练到疲劳",
+        "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "卧推递增热身",
+        "desc": "用轻重量做 1–2 组上斜卧推，组间调整呼吸，再进入正式组",
+        "dur": 150
       }
     ],
     "items": [
@@ -28,39 +34,31 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 8,
         "workSec": 30,
-        "restSec": 50
-      },
-      {
-        "kind": "exercise",
-        "exId": "0414",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 40
+        "restSec": 75
       },
       {
         "kind": "exercise",
         "exId": "0289",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 50
-      },
-      {
-        "kind": "exercise",
-        "exId": "0296",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 60
+      },
+      {
+        "kind": "exercise",
+        "exId": "0404",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 60,
+        "note": "双臂同时完成，每次两侧一起推起。"
       },
       {
         "kind": "exercise",
         "exId": "0301",
-        "sets": 3,
+        "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -73,43 +71,36 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 45
       },
       {
         "kind": "exercise",
         "exId": "0308",
-        "sets": 3,
+        "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 40,
+        "note": "与哑铃挤压卧推按训练周期二选一；不额外叠加组数。"
       },
       {
         "kind": "exercise",
-        "exId": "0377",
+        "exId": "0383",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 25
+        "restSec": 35
       },
       {
         "kind": "exercise",
-        "exId": "1741",
+        "exId": "2188",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0129",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 35
+        "restSec": 45,
+        "note": "双手握一只哑铃，过顶屈伸；上臂保持稳定。"
       }
     ],
     "cooldown": [
@@ -139,24 +130,54 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "拉日（哑铃+一体机+单杠）：背（垂直拉+水平拉）+ 肩后束 + 二头 + 核心。背部保留一个下拉/引体主项和两个不同角度的划船主项；反向飞鸟补肩后束、防圆肩；核心覆盖抗伸展与侧链，超伸展只作腰背补充。强度指引：拉类复合动作留 1–2 次余力（RPE 8），二头与孤立动作留 2–3 次。安全提示：引体前先做 1 组自重减半或弹力带辅助的递增组。",
+    "intro": "进阶拉日：垂直拉 + 胸托水平拉，配二头与核心，8 个动作、25 个执行组。引体默认每组 8 次，可按能力调至 6–10 次；有合适设备时可换成高位下拉，不额外叠加。侧桥每组只做一侧，左、右轮换，每侧 2 组；死虫与鸟狗在组内交替。主项留 1–2 次余力，辅助动作留 1–3 次。",
     "warmup": [
       {
         "kind": "stretch",
-        "name": "肩带激活",
-        "desc": "招财猫或弹力带外旋 15 次，激活肩袖",
+        "name": "轻松活动",
+        "desc": "快走或原地踏步，让身体逐渐热起来",
         "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "肩带活动",
+        "desc": "轻松肩部环绕、外旋与肩胛活动，不练到疲劳",
+        "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "拉类递增热身",
+        "desc": "用可控助力做轻松引体准备，再做轻重量胸托划船；预留组间调整时间",
+        "dur": 150
       }
     ],
     "items": [
       {
         "kind": "exercise",
-        "exId": "0198",
+        "exId": "0651",
         "sets": 4,
         "mode": "rep",
-        "reps": 10,
+        "reps": 8,
         "workSec": 30,
-        "restSec": 45
+        "restSec": 90
+      },
+      {
+        "kind": "exercise",
+        "exId": "0327",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 60
+      },
+      {
+        "kind": "exercise",
+        "exId": "0383",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 35
       },
       {
         "kind": "exercise",
@@ -165,12 +186,12 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 45
       },
       {
         "kind": "exercise",
-        "exId": "0293",
-        "sets": 4,
+        "exId": "0312",
+        "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
@@ -183,61 +204,31 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0651",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 8,
-        "workSec": 30,
-        "restSec": 50
-      },
-      {
-        "kind": "exercise",
-        "exId": "0312",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 30
-      },
-      {
-        "kind": "exercise",
-        "exId": "0327",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "0383",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 25
+        "restSec": 40,
+        "repSec": 3,
+        "note": "组内左右交替，共 12 次，每侧 6 次；腰部保持稳定。"
       },
       {
         "kind": "exercise",
         "exId": "0705",
-        "sets": 3,
+        "sets": 4,
         "mode": "time",
         "reps": 12,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 30,
+        "sideMode": "alternatingSets",
+        "note": "左—右—左—右，每侧 2 组；每组只做提示的一侧。"
       },
       {
         "kind": "exercise",
-        "exId": "0488",
+        "exId": "local-bird-dog",
         "sets": 2,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 40
+        "restSec": 40,
+        "repSec": 4,
+        "note": "组内对侧手脚交替，共 12 次，每侧 6 次；伸展后短暂停顿，保持骨盆稳定。"
       }
     ],
     "cooldown": [
@@ -261,42 +252,65 @@ window.PRESET_PLANS = [
     "name": "周五 · 腿·臀",
     "tags": [],
     "level": "进阶",
-    "intro": "腿臀增肌日（哑铃+自重）：先激活臀部，再做双腿蹲 + 箭步蹲（股四主导），配 RDL 与单腿硬拉练后链、侧向动作补平面。深蹲、硬拉最多休 50 秒，其他动作 40 秒以内。强度指引：大重量深蹲/硬拉留 1–2 次余力（RPE 8），箭步与孤立动作留 2–3 次。安全提示：高脚杯深蹲正式组前，先用 50%/70% 重量各做 1 组 10 次递增热身。",
+    "intro": "进阶腿臀日：双腿蹲、髋铰链与一个单腿蹲主项，补臀桥、小腿、髋外展和核心抗旋转。7 个动作、27 个执行组；单侧动作左、右轮换，每侧 2 组。主项留 1–2 次余力，辅助动作留 1–3 次，稳定达到目标次数后再小幅加重。抗旋转推举须使用可靠固定点；无合适条件时，在我的计划中换成死虫 3 组、左右各 6 次。",
     "warmup": [
       {
         "kind": "stretch",
-        "name": "下肢动态激活",
-        "desc": "摆腿 + 触趾 + 髋绕环 各 1 分钟",
-        "dur": 90
+        "name": "轻松活动",
+        "desc": "快走或原地踏步，让身体逐渐热起来",
+        "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "下肢动态活动",
+        "desc": "轻松摆腿、髋绕环与徒手蹲，不练到疲劳",
+        "dur": 60
+      },
+      {
+        "kind": "stretch",
+        "name": "深蹲与髋铰链热身",
+        "desc": "先做轻重量高脚杯深蹲，再练轻重量髋铰链，预留调整呼吸和换器材时间",
+        "dur": 150
       }
     ],
     "items": [
       {
         "kind": "exercise",
-        "exId": "0710",
-        "sets": 3,
+        "exId": "1760",
+        "sets": 4,
         "mode": "rep",
-        "reps": 15,
+        "reps": 10,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 60
+      },
+      {
+        "kind": "exercise",
+        "exId": "1459",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 60
+      },
+      {
+        "kind": "exercise",
+        "exId": "0381",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 45,
+        "sideMode": "alternatingSets",
+        "note": "每组只做提示的一侧支撑腿；左—右—左—右，每侧 2 组。"
       },
       {
         "kind": "exercise",
         "exId": "3013",
-        "sets": 4,
+        "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "1760",
-        "sets": 5,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 50
+        "restSec": 40
       },
       {
         "kind": "exercise",
@@ -305,52 +319,30 @@ window.PRESET_PLANS = [
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
-        "restSec": 30
+        "restSec": 35
       },
       {
         "kind": "exercise",
-        "exId": "1459",
+        "exId": "0710",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 50
+        "restSec": 30,
+        "sideMode": "alternatingSets",
+        "note": "每组只抬提示的一侧腿，做完换侧；每侧 2 组。"
       },
       {
         "kind": "exercise",
-        "exId": "0336",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "3769",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 35
-      },
-      {
-        "kind": "exercise",
-        "exId": "1757",
+        "exId": "0979",
         "sets": 4,
         "mode": "rep",
         "reps": 10,
         "workSec": 30,
-        "restSec": 45
-      },
-      {
-        "kind": "exercise",
-        "exId": "3561",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 20,
-        "workSec": 30,
-        "restSec": 45
+        "restSec": 35,
+        "sideMode": "alternatingSets",
+        "repSec": 3,
+        "note": "左侧组让固定点在身体左侧，右侧组相反；每组双手一起推，身体不转。每侧 2 组。"
       }
     ],
     "cooldown": [

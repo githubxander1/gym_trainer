@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 240" role="img" aria-label="鸟狗式：伸出对侧手脚，保持背部与骨盆稳定">
+  <rect width="480" height="240" rx="20" fill="#17232d"/>
+  <path d="M28 198H452" stroke="#71838e" stroke-width="3"/>
+  <g fill="none" stroke="#77d9bc" stroke-width="13" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M158 105H287L391 110M158 105L67 105M164 112L171 191M282 111L276 169H325"/>
+    <circle cx="129" cy="83" r="20"/>
+  </g>
+  <text x="240" y="224" fill="#fff" text-anchor="middle" font-family="sans-serif" font-size="17">对侧手脚伸展 · 左右交替 · 保持骨盆稳定</text>
+</svg>
