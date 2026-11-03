@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "进阶推日（哑铃+健身凳）：上胸 / 胸整体 / 肩三束 / 三头。复合动作优先、孤立随后：上斜卧推主打上胸（最显形），平板卧推给整体量，飞鸟做胸孤立拉伸；肩上推举练肩前+整体，侧上举造中束宽度，反向飞鸟（站姿、不占凳）补后束改善圆肩；三头用窄握推举（胸+三头复合）+ 凳臂屈伸（自重、不过顶、护肩）。8 个动作、25 组。主项留 1–2 次余力，辅助留 1–3 次；稳定达成目标次数后再小幅加重。",
+    "intro": "进阶推日（哑铃+健身凳）：上胸 / 中胸 / 下胸 / 肩三束 / 三头，胸三个维度齐全。复合动作优先、孤立随后：上斜卧推主打上胸（最显形），平板卧推给中胸量，飞鸟+下斜飞鸟分别覆盖胸中部与下胸（下斜孤立下胸、避免只练上中）；肩上推举练肩前+整体，侧上举造中束宽度，反向飞鸟用站姿俯身版（不占凳、不扶凳）补后束改善圆肩；三头用窄握推举（胸+三头复合）+ 凳臂屈伸（自重、不过顶、护肩）。9 个动作、28 组。主项留 1–2 次余力，辅助留 1–3 次；稳定达成目标次数后再小幅加重。",
     "warmup": [
       {
         "kind": "stretch",
@@ -24,6 +24,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0314",
+        "label": "哑铃上斜卧推",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -33,6 +34,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0289",
+        "label": "哑铃卧推",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -42,6 +44,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0404",
+        "label": "哑铃坐姿肩上推举",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -52,16 +55,29 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0308",
+        "label": "哑铃飞鸟",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
         "restSec": 40,
-        "note": "胸孤立拉伸；与哑铃挤压卧推按训练周期二选一，不额外叠加组数。"
+        "note": "胸中部孤立拉伸；与哑铃挤压卧推按训练周期二选一，不额外叠加组数。"
+      },
+      {
+        "kind": "exercise",
+        "exId": "0302",
+        "label": "哑铃下斜飞鸟",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 40,
+        "note": "下斜角度孤立下胸（胸肌下部），与上斜/平板互补，覆盖胸的三个维度。"
       },
       {
         "kind": "exercise",
         "exId": "0334",
+        "label": "哑铃侧上举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -70,17 +86,19 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0383",
+        "exId": "0380",
+        "label": "哑铃反向飞鸟",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
         "workSec": 30,
         "restSec": 35,
-        "note": "站姿俯身完成、不占健身凳：双脚与肩同宽，上身前倾约 45°，双臂微屈向两侧平举至肩高，练肩后束、改善圆肩。"
+        "note": "站姿俯身、不扶凳完成：双脚与肩同宽，上身前倾约 45°，双臂微屈向两侧平举至肩高，练肩后束、改善圆肩。"
       },
       {
         "kind": "exercise",
         "exId": "0296",
+        "label": "哑铃窄握推举",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -91,6 +109,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0129",
+        "label": "凳臂屈伸",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -126,7 +145,7 @@ window.PRESET_PLANS = [
     "name": "周三 · 背·臂·核心",
     "tags": [],
     "level": "进阶",
-    "intro": "进阶拉日：垂直拉 + 胸托水平拉，配二头与核心，8 个动作、25 个执行组。引体默认每组 8 次，可按能力调至 6–10 次；有合适设备时可换成高位下拉，不额外叠加。侧桥每组只做一侧，左、右轮换，每侧 2 组；死虫与鸟狗在组内交替。主项留 1–2 次余力，辅助动作留 1–3 次。",
+    "intro": "进阶拉日：垂直拉（引体）+ 俯身水平拉（俯身划船），配二头与核心，8 个动作、25 个执行组。引体默认每组 8 次，可按能力调至 6–10 次；有合适设备时可换成高位下拉，不额外叠加。俯身划船为站姿屈髋划船， elbows 向身后驱动、明确练背（上背/背阔）；侧桥每组只做一侧，左、右轮换，每侧 2 组；死虫与鸟狗在组内交替。主项留 1–2 次余力，辅助动作留 1–3 次。",
     "warmup": [
       {
         "kind": "stretch",
@@ -145,6 +164,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0651",
+        "label": "引体向上",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -153,25 +173,30 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0327",
+        "exId": "0293",
+        "label": "哑铃俯身划船",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 60
+        "restSec": 60,
+        "note": "站姿屈髋、背部挺直，哑铃沿身体两侧拉向腰际，肘向后驱动，明确练背（上背+背阔）。"
       },
       {
         "kind": "exercise",
-        "exId": "0383",
+        "exId": "0380",
+        "label": "哑铃反向飞鸟",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
         "workSec": 30,
-        "restSec": 35
+        "restSec": 35,
+        "note": "站姿俯身、不扶凳，练肩后束（背侧）；与划船互补，改善圆肩。"
       },
       {
         "kind": "exercise",
         "exId": "0294",
+        "label": "哑铃二头弯举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -181,6 +206,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0312",
+        "label": "哑铃锤式弯举",
         "sets": 2,
         "mode": "rep",
         "reps": 12,
@@ -190,6 +216,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0276",
+        "label": "死虫",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -201,6 +228,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0705",
+        "label": "侧桥",
         "sets": 4,
         "mode": "time",
         "reps": 12,
@@ -212,6 +240,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "local-bird-dog",
+        "label": "鸟狗式",
         "sets": 2,
         "mode": "rep",
         "reps": 12,
@@ -261,6 +290,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1760",
+        "label": "哑铃高脚杯深蹲",
         "sets": 5,
         "mode": "rep",
         "reps": 10,
@@ -270,6 +300,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1459",
+        "label": "哑铃罗马尼亚硬拉",
         "sets": 4,
         "mode": "rep",
         "reps": 10,
@@ -279,6 +310,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0381",
+        "label": "哑铃后箭步蹲",
         "sets": 4,
         "mode": "rep",
         "reps": 10,
@@ -290,6 +322,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
+        "label": "低臀桥地面",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -299,6 +332,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0417",
+        "label": "哑铃站姿提踵",
         "sets": 4,
         "mode": "rep",
         "reps": 15,
@@ -308,6 +342,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0710",
+        "label": "侧髋外展",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -319,6 +354,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0464",
+        "label": "前平板支撑转体",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -367,6 +403,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3224",
+        "label": "开合跳（男）",
         "sets": 4,
         "mode": "time",
         "reps": 12,
@@ -376,6 +413,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1160",
+        "label": "波比跳",
         "sets": 4,
         "mode": "time",
         "reps": 12,
@@ -385,6 +423,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0630",
+        "label": "登山者",
         "sets": 4,
         "mode": "time",
         "reps": 12,
@@ -394,6 +433,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3636",
+        "label": "高膝靠墙",
         "sets": 4,
         "mode": "time",
         "reps": 12,
@@ -403,6 +443,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0459",
+        "label": "上下踢腿",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -452,6 +493,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1274",
+        "label": "深俯卧撑",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -461,6 +503,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0675",
+        "label": "反向超伸展",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -470,6 +513,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1373",
+        "label": "自重站姿提踵",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -479,6 +523,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0464",
+        "label": "前平板支撑转体",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -488,6 +533,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0687",
+        "label": "俄罗斯转体",
         "sets": 3,
         "mode": "rep",
         "reps": 20,
@@ -497,6 +543,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
+        "label": "低臀桥地面",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -506,6 +553,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0630",
+        "label": "登山者",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -515,6 +563,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0457",
+        "label": "屈曲腿仰卧起坐",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -524,6 +573,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3769",
+        "label": "侧弓步蹲",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -573,6 +623,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1760",
+        "label": "哑铃高脚杯深蹲",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -582,6 +633,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1459",
+        "label": "哑铃罗马尼亚硬拉",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -591,6 +643,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0404",
+        "label": "哑铃坐姿肩上推举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -600,6 +653,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0308",
+        "label": "哑铃飞鸟",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -609,6 +663,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0334",
+        "label": "哑铃侧上举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -618,6 +673,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0312",
+        "label": "哑铃锤式弯举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -627,6 +683,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0300",
+        "label": "哑铃硬拉",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -636,6 +693,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
+        "label": "低臀桥地面",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -685,6 +743,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3769",
+        "label": "侧弓步蹲",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -694,6 +753,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3013",
+        "label": "低臀桥地面",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -703,6 +763,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1760",
+        "label": "哑铃高脚杯深蹲",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -712,6 +773,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1274",
+        "label": "深俯卧撑",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -721,6 +783,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0334",
+        "label": "哑铃侧上举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -730,6 +793,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0687",
+        "label": "俄罗斯转体",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -739,6 +803,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0464",
+        "label": "前平板支撑转体",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -748,6 +813,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "3645",
+        "label": "单腿桥伸展腿",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -796,6 +862,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0294",
+        "label": "哑铃二头弯举",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -805,6 +872,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0312",
+        "label": "哑铃锤式弯举",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -814,6 +882,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0297",
+        "label": "哑铃集中弯举",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -823,6 +892,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0382",
+        "label": "哑铃反握二头弯举",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -832,6 +902,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "1741",
+        "label": "哑铃站姿俯身双臂三头屈伸",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -841,6 +912,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0296",
+        "label": "哑铃窄握推举",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -850,6 +922,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0129",
+        "label": "凳臂屈伸",
         "sets": 3,
         "mode": "rep",
         "reps": 10,
@@ -859,6 +932,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "2398",
+        "label": "窄握俯卧撑",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -899,6 +973,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0271",
+        "label": "卷腹",
         "sets": 4,
         "mode": "rep",
         "reps": 15,
@@ -908,6 +983,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0872",
+        "label": "反向卷腹",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -917,6 +993,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0276",
+        "label": "死虫",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -926,6 +1003,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0687",
+        "label": "俄罗斯转体",
         "sets": 3,
         "mode": "rep",
         "reps": 20,
@@ -935,6 +1013,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0464",
+        "label": "前平板支撑转体",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -944,6 +1023,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0705",
+        "label": "侧桥",
         "sets": 3,
         "mode": "time",
         "reps": 12,
@@ -953,6 +1033,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0488",
+        "label": "超伸展",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -962,6 +1043,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0507",
+        "label": "折刀仰卧起坐",
         "sets": 3,
         "mode": "rep",
         "reps": 15,
@@ -1008,6 +1090,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0314",
+        "label": "哑铃上斜卧推",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -1017,6 +1100,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0289",
+        "label": "哑铃卧推",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -1026,6 +1110,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0301",
+        "label": "哑铃下斜卧推",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -1035,6 +1120,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0308",
+        "label": "哑铃飞鸟",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -1044,6 +1130,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0651",
+        "label": "引体向上",
         "sets": 4,
         "mode": "rep",
         "reps": 8,
@@ -1053,6 +1140,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0293",
+        "label": "哑铃俯身划船",
         "sets": 4,
         "mode": "rep",
         "reps": 12,
@@ -1062,6 +1150,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0327",
+        "label": "哑铃上斜划船",
         "sets": 3,
         "mode": "rep",
         "reps": 12,
@@ -1071,6 +1160,7 @@ window.PRESET_PLANS = [
       {
         "kind": "exercise",
         "exId": "0292",
+        "label": "哑铃单臂俯身划船",
         "sets": 3,
         "mode": "rep",
         "reps": 12,

@@ -527,7 +527,7 @@
         <div class="plan-item" data-key="${key}" data-i="${i}">
           <img class="thumb" src="${ex ? ex.image : ''}" alt="" onerror="this.style.display='none'">
           <div class="info">
-            <div class="name">${esc(ex ? (ex.nameZh || ex.name) : '?')}</div>
+            <div class="name">${esc(it.label || (ex ? (ex.nameZh || ex.name) : '?'))}</div>
             ${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}
             <div class="stepper">
               <button data-act="sets" data-d="-1">−</button><span class="val">${it.sets} 组</span><button data-act="sets" data-d="1">+</button>

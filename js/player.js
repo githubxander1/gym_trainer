@@ -323,13 +323,19 @@ window.TrainerPlayer = (function () {
       const isRep = block.mode !== 'time';
       const sec = isRep ? 0 : (block.workSec || 30);
       const reps = block.reps || 12;
+      const itemLabel = block.label || (ex && (ex.nameZh || ex.name)) || '动作';
       for (let s = 1; s <= sets; s++) {
         const side = block.sideMode === 'alternatingSets' ? (s % 2 ? '左侧' : '右侧') : '';
-        segs.push({ type: 'work', ex, set: s, totalSets: sets, sec, reps, isRep, side, note: block.note || '', repMs: block.repSec ? block.repSec * 1000 : REP_PACE_MS });
-        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, totalSets: sets, nextEx: ex,
+        segs.push({ type: 'work', ex, label: itemLabel, set: s, totalSets: sets, sec, reps, isRep, side, note: block.note || '', repMs: block.repSec ? block.repSec * 1000 : REP_PACE_MS });
+        if (s < sets) segs.push({ type: 'rest', sec: rest, ex, set: s + 1, totalSets: sets, nextEx: ex, nextLabel: itemLabel,
           side: block.sideMode === 'alternatingSets' ? ((s + 1) % 2 ? '左侧' : '右侧') : '' });
       }
-      if (!isLast) segs.push({ type: 'rest', sec: rest, ex, set: 1, totalSets: 1, nextEx: window.AppData.get((blocks[bi + 1] && blocks[bi + 1].exId) || '') });
+      if (!isLast) {
+        const nb = blocks[bi + 1];
+        const nextEx = window.AppData.get((nb && nb.exId) || '');
+        const nextLabel = (nb && nb.label) || (nextEx && (nextEx.nameZh || nextEx.name)) || '下一动作';
+        segs.push({ type: 'rest', sec: rest, ex, set: 1, totalSets: 1, nextEx, nextLabel });
+      }
     });
     if (segs.length && segs[segs.length - 1].type === 'rest') segs.pop();
     return segs;
@@ -379,7 +385,9 @@ window.TrainerPlayer = (function () {
     const seg = segments[idx];
     if (!seg) { renderDone(); return; }
     const ex = (seg.type === 'work') ? seg.ex : (seg.nextEx || seg.ex);
-    const nameZh = seg.type === 'stretch' ? seg.name : (ex ? (ex.nameZh || ex.name) : '休息');
+    const nameZh = seg.type === 'stretch' ? seg.name
+      : seg.type === 'rest' ? (seg.nextLabel || (seg.nextEx && (seg.nextEx.nameZh || seg.nextEx.name)) || '休息')
+      : (seg.label || (ex && (ex.nameZh || ex.name)) || '休息');
     const isWork = seg.type === 'work';
 
     // 次数模式
