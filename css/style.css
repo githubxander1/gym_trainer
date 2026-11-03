@@ -284,3 +284,25 @@ textarea.form-input { resize: vertical; }
   opacity: 0; pointer-events: none; transition: all .25s; z-index: 100; max-width: 80%;
 }
 #toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* 健身知识点 */
+.kn-cat { font-size: 12px; color: var(--accent-2); font-weight: 700; margin: 16px 0 6px; letter-spacing: .5px; }
+.kn-card {
+  display: flex; align-items: center; gap: 10px; background: var(--bg-elev); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 14px 14px; margin-bottom: 10px; cursor: pointer;
+}
+.kn-card:active { transform: scale(.99); }
+.kn-card .meta { flex: 1; min-width: 0; }
+.kn-card .name { font-weight: 700; font-size: 15px; }
+.kn-card .sub { color: var(--text-dim); font-size: 12px; margin-top: 3px; line-height: 1.4; }
+.kn-card .pc-go { color: var(--text-dim); font-size: 18px; }
+.kn-tags { margin: 8px 0 2px; }
+.kn-body { margin: 6px 0; }
+.kn-body .kn-p { margin: 10px 0; line-height: 1.65; }
+.kn-body .kn-bullet { margin: 5px 0 5px 4px; padding-left: 12px; position: relative; color: var(--text); line-height: 1.55; }
+.kn-body .kn-bullet::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-weight: 800; }
+.kn-link {
+  display: block; margin: 8px 0; padding: 11px 12px; background: var(--bg-elev2); border: 1px solid var(--line);
+  border-radius: 10px; color: var(--accent-2); text-decoration: none; font-size: 13px; word-break: break-all;
+}
+.kn-link:active { transform: scale(.99); }

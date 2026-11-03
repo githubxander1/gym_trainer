@@ -327,6 +327,58 @@
     return m[t] || 'g-full';
   }
 
+  // ---------- 健身知识点 ----------
+  function renderKnowledge() {
+    const all = window.KNOWLEDGE || [];
+    const cats = [];
+    all.forEach((k) => { if (!cats.includes(k.category)) cats.push(k.category); });
+    let html = `<div class="section-title">健身 / 健康知识点（点开看详情，可继续补充）</div>`;
+    cats.forEach((cat) => {
+      const items = all.filter((k) => k.category === cat);
+      html += `<div class="kn-cat">${esc(cat)}</div><div class="list">` +
+        items.map((k) => `
+          <div class="kn-card" data-kid="${esc(k.id)}">
+            <div class="meta">
+              <div class="name">${esc(k.title)}</div>
+              <div class="sub">${esc(k.summary || '')}</div>
+            </div>
+            <div class="pc-go">›</div>
+          </div>`).join('') +
+        `</div>`;
+    });
+    if (!all.length) html = `<div class="empty"><div class="big">💡</div>还没有知识点</div>`;
+    view.innerHTML = html;
+    view.querySelectorAll('.kn-card').forEach((c) => { c.onclick = () => openKnowledge(c.dataset.kid); });
+  }
+
+  function openKnowledge(id) {
+    const k = (window.KNOWLEDGE || []).find((x) => x.id === id);
+    if (!k) return;
+    const bodyHtml = (k.body || '').split('\n').map((line) => {
+      const t = line.trim();
+      if (!t) return '';
+      if (t.startsWith('· ') || t.startsWith('• ')) return `<div class="kn-bullet">${esc(t.replace(/^[·•]\s?/, ''))}</div>`;
+      return `<p class="kn-p">${esc(t)}</p>`;
+    }).join('');
+    const linksHtml = (k.links && k.links.length)
+      ? `<div class="section-title">相关链接</div>` + k.links.map((l) => `<a class="kn-link" href="${esc(l.url)}" target="_blank" rel="noopener">🔗 ${esc(l.label)}</a>`).join('')
+      : '';
+    const tagsHtml = (k.tags && k.tags.length) ? `<div class="kn-tags">${k.tags.map((t) => `<span class="tag">${esc(t)}</span>`).join('')}</div>` : '';
+    const mask = document.createElement('div');
+    mask.className = 'sheet-mask';
+    mask.innerHTML = `
+      <div class="sheet">
+        <button class="close">关闭</button>
+        <h3>${esc(k.title)}</h3>
+        ${tagsHtml}
+        <div class="kn-body">${bodyHtml}</div>
+        ${linksHtml}
+      </div>`;
+    document.body.appendChild(mask);
+    mask.querySelector('.close').onclick = () => mask.remove();
+    mask.onclick = (e) => { if (e.target === mask) mask.remove(); };
+  }
+
   // ---------- 左滑删除（我的计划） ----------
   function bindSwipe() {
     view.querySelectorAll('.swipe').forEach((sw) => {
@@ -569,6 +621,7 @@
     currentTab = tab;
     tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === tab));
     if (tab === 'library') renderLibrary();
+    else if (tab === 'knowledge') renderKnowledge();
     else if (tab === 'plan') { planView = 'list'; renderPlanList(); }
   }
   tabs.forEach((t) => { t.onclick = () => switchTab(t.dataset.tab); });
