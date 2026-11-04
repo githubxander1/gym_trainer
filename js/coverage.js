@@ -1,37 +1,51 @@
-// 肌肉覆盖图：用 exercises 的 bodyPartZh（身体部位）做分区，纯前端 SVG 上色。
-// 选 bodyPartZh 而非细肌群，是因为数据集对复合动作（如罗马尼亚硬拉）只标主部位（臀肌），
-// 若按 targetZh 细算会把腘绳肌/斜方肌误报成缺口。另加「胸三维」指示灯补细维度。
-// 绿色越深=该部位组数越多；红框=本次没练到（建议补）。
+// 肌肉覆盖图（细分区版）：按 exercises 的 targetZh 细肌群分区，纯前端 SVG 上色。
+// 关键改进：把"整条腿"拆成 股四/臀/腘绳、"背"拆成 背阔肌/上背、"手臂"拆成 肱二/肱三，
+// 这样能真实暴露「股四练得少」这类短板（粗分区会把整条腿标绿而掩盖）。
+// 复合动作的次要肌群用 SECONDARY 手动补偿（数据集只标主部位，否则会误报缺口）。
+// 绿色越深=该部位组数越多；红框=本次没练到（建议补）。悬停图形看部位名。
 (function () {
-  // 7 个需要覆盖的大部位（漏了会标红）
-  const GAP = ['chest', 'shoulders', 'arms', 'core', 'back', 'thighs', 'calves'];
+  // 11 个大部位（漏了会标红）。一三五合计应全覆盖。
+  const GAP = ['chest', 'delts', 'biceps', 'triceps', 'core', 'lats', 'upperback', 'quads', 'glutes', 'hamstrings', 'calves'];
   const LABEL = {
-    chest: '胸', shoulders: '肩', arms: '手臂', core: '腹/核心',
-    back: '背', thighs: '大腿', calves: '小腿', neck: '颈'
+    chest: '胸', delts: '肩', biceps: '肱二头', triceps: '肱三头', core: '腹/核心',
+    lats: '背阔肌', upperback: '上背', quads: '股四头', glutes: '臀', hamstrings: '腘绳', calves: '小腿', forearms: '前臂'
   };
 
-  // bodyPartZh -> 分区（前臂并入手臂，臀/腘绳/股四并入大腿，避免复合动作误报缺口）
-  const BP_MAP = {
-    '胸': ['chest'], '肩': ['shoulders'], '手臂': ['arms'], '前臂': ['arms'],
-    '腰腹': ['core'], '背': ['back'], '大腿': ['thighs'], '小腿': ['calves'], '颈部': ['neck']
+  // targetZh（细肌群）-> 分区
+  const PRIMAP = {
+    '胸肌': 'chest', '三角肌': 'delts', '肱二头肌': 'biceps', '肱三头肌': 'triceps', '腹肌': 'core',
+    '背阔肌': 'lats', '上背肌': 'upperback', '斜方肌': 'upperback', '股四头肌': 'quads', '臀肌': 'glutes',
+    '腘绳肌': 'hamstrings', '小腿': 'calves', '外展肌': 'glutes', '核心稳定': 'core', '前臂': 'forearms'
   };
-  // targetZh -> bodyPartZh 兜底（个别动作缺 bodyPartZh 时用）
-  const T2BP = {
-    '胸肌': '胸', '三角肌': '肩', '肱二头肌': '手臂', '肱三头肌': '手臂', '腹肌': '腰腹',
-    '上背肌': '背', '背阔肌': '背', '臀肌': '大腿', '股四头肌': '大腿', '腘绳肌': '大腿',
-    '斜方肌': '背', '小腿': '小腿', '前臂': '手臂', '脊柱': '背'
+  // bodyPartZh 兜底（个别动作缺 targetZh 时用）；大腿/手臂按部位拆分
+  const BODYMAP = {
+    '胸': ['chest'], '肩': ['delts'], '手臂': ['biceps', 'triceps'], '腰腹': ['core'],
+    '背': ['lats', 'upperback'], '大腿': ['quads', 'glutes'], '小腿': ['calves'], '颈部': ['forearms']
+  };
+  // 复合动作次要肌群补偿：数据集只标主部位，这里补上真正的协同肌，避免假缺口
+  const SECONDARY = {
+    '1760': ['glutes'],            // 高脚杯深蹲：股四主，臀次
+    '1459': ['hamstrings'],        // 罗马尼亚硬拉：臀主，腘绳次（真正的主练腘绳动作）
+    '0381': ['hamstrings'],        // 后箭步蹲：臀主，腘绳次
+    '0293': ['lats'],              // 俯身划船：上背主，背阔次
+    '0651': ['biceps', 'upperback'], // 引体：背阔主，二头+上背次
+    '0314': ['delts'],             // 上斜卧推：胸主，前束次
+    '0289': ['delts', 'triceps'],  // 卧推：胸主，前束+三头次
+    '0404': ['triceps'],           // 肩上推举：肩主，三头次
+    '0334': ['traps'],             // 侧平举：中束主，斜方次（traps 入 upperback 显示）
+    '0380': ['traps']              // 反向飞鸟：后束主，斜方次
   };
 
   function regionForExercise(ex) {
     if (!ex) return [];
-    const b = ex.bodyPartZh || ex.bodyPart || '';
-    if (BP_MAP[b]) return BP_MAP[b];
     const t = ex.targetZh || ex.target || '';
-    if (T2BP[t]) return BP_MAP[T2BP[t]];
+    if (PRIMAP[t]) return [PRIMAP[t]];
+    const b = ex.bodyPartZh || ex.bodyPart || '';
+    if (BODYMAP[b]) return BODYMAP[b].slice();
     return [];
   }
 
-  // 计算一组计划里每个分区的累计组数
+  // 计算一组计划里每个分区的累计组数（含次要肌群补偿）
   function planLoads(ids) {
     const loads = {};
     (ids || []).forEach((pid) => {
@@ -40,7 +54,8 @@
       (p.items || []).forEach((it) => {
         if (it.kind !== 'exercise' || !it.exId) return;
         const ex = window.AppData.get(it.exId);
-        regionForExercise(ex).forEach((r) => { loads[r] = (loads[r] || 0) + (it.sets || 0); });
+        const regs = regionForExercise(ex).concat(SECONDARY[it.exId] || []);
+        regs.forEach((r) => { loads[r] = (loads[r] || 0) + (it.sets || 0); });
       });
     });
     return loads;
@@ -67,43 +82,41 @@
     return z;
   }
 
-  // 身体分区覆盖形状（正面 cx~90，背面 cx~270）
+  // 身体分区覆盖形状（正面 cx~90，背面 cx~270）；r 为细分区键
   const SHAPES = [
     // 正面
     { r: 'chest', t: 'ellipse', cx: 90, cy: 80, rx: 32, ry: 24 },
-    { r: 'shoulders', t: 'ellipse', cx: 52, cy: 78, rx: 13, ry: 15 },
-    { r: 'shoulders', t: 'ellipse', cx: 128, cy: 78, rx: 13, ry: 15 },
-    { r: 'arms', t: 'ellipse', cx: 50, cy: 110, rx: 9, ry: 18 },
-    { r: 'arms', t: 'ellipse', cx: 130, cy: 110, rx: 9, ry: 18 },
-    { r: 'arms', t: 'ellipse', cx: 46, cy: 140, rx: 7, ry: 17 },
-    { r: 'arms', t: 'ellipse', cx: 134, cy: 140, rx: 7, ry: 17 },
+    { r: 'delts', t: 'ellipse', cx: 52, cy: 78, rx: 13, ry: 15 },
+    { r: 'delts', t: 'ellipse', cx: 128, cy: 78, rx: 13, ry: 15 },
+    { r: 'biceps', t: 'ellipse', cx: 50, cy: 110, rx: 9, ry: 18 },
+    { r: 'biceps', t: 'ellipse', cx: 130, cy: 110, rx: 9, ry: 18 },
+    { r: 'biceps', t: 'ellipse', cx: 46, cy: 140, rx: 7, ry: 17 },
+    { r: 'biceps', t: 'ellipse', cx: 134, cy: 140, rx: 7, ry: 17 },
     { r: 'core', t: 'rect', x: 72, y: 102, w: 36, h: 46, rx: 9 },
-    { r: 'thighs', t: 'ellipse', cx: 72, cy: 210, rx: 15, ry: 44 },
-    { r: 'thighs', t: 'ellipse', cx: 108, cy: 210, rx: 15, ry: 44 },
-    { r: 'neck', t: 'rect', x: 82, y: 44, w: 16, h: 10, rx: 3 },
+    { r: 'quads', t: 'ellipse', cx: 72, cy: 210, rx: 15, ry: 44 },
+    { r: 'quads', t: 'ellipse', cx: 108, cy: 210, rx: 15, ry: 44 },
     // 背面
-    { r: 'back', t: 'ellipse', cx: 270, cy: 72, rx: 30, ry: 18 },
-    { r: 'shoulders', t: 'ellipse', cx: 232, cy: 80, rx: 13, ry: 15 },
-    { r: 'shoulders', t: 'ellipse', cx: 308, cy: 80, rx: 13, ry: 15 },
-    { r: 'back', t: 'ellipse', cx: 236, cy: 114, rx: 22, ry: 34 },
-    { r: 'back', t: 'ellipse', cx: 304, cy: 114, rx: 22, ry: 34 },
-    { r: 'back', t: 'ellipse', cx: 270, cy: 112, rx: 20, ry: 26 },
-    { r: 'arms', t: 'ellipse', cx: 234, cy: 120, rx: 9, ry: 18 },
-    { r: 'arms', t: 'ellipse', cx: 306, cy: 120, rx: 9, ry: 18 },
-    { r: 'back', t: 'rect', x: 264, y: 94, w: 12, h: 70, rx: 4 },
-    { r: 'thighs', t: 'ellipse', cx: 270, cy: 198, rx: 28, ry: 22 },
-    { r: 'thighs', t: 'ellipse', cx: 252, cy: 242, rx: 14, ry: 38 },
-    { r: 'thighs', t: 'ellipse', cx: 288, cy: 242, rx: 14, ry: 38 },
+    { r: 'lats', t: 'ellipse', cx: 270, cy: 72, rx: 30, ry: 18 },
+    { r: 'delts', t: 'ellipse', cx: 232, cy: 80, rx: 13, ry: 15 },
+    { r: 'delts', t: 'ellipse', cx: 308, cy: 80, rx: 13, ry: 15 },
+    { r: 'upperback', t: 'ellipse', cx: 236, cy: 114, rx: 22, ry: 34 },
+    { r: 'upperback', t: 'ellipse', cx: 304, cy: 114, rx: 22, ry: 34 },
+    { r: 'upperback', t: 'ellipse', cx: 270, cy: 112, rx: 20, ry: 26 },
+    { r: 'triceps', t: 'ellipse', cx: 234, cy: 120, rx: 9, ry: 18 },
+    { r: 'triceps', t: 'ellipse', cx: 306, cy: 120, rx: 9, ry: 18 },
+    { r: 'upperback', t: 'rect', x: 264, y: 94, w: 12, h: 70, rx: 4 },
+    { r: 'glutes', t: 'ellipse', cx: 270, cy: 198, rx: 28, ry: 22 },
+    { r: 'hamstrings', t: 'ellipse', cx: 252, cy: 242, rx: 14, ry: 38 },
+    { r: 'hamstrings', t: 'ellipse', cx: 288, cy: 242, rx: 14, ry: 38 },
     { r: 'calves', t: 'ellipse', cx: 252, cy: 310, rx: 12, ry: 30 },
-    { r: 'calves', t: 'ellipse', cx: 288, cy: 310, rx: 12, ry: 30 },
-    { r: 'neck', t: 'rect', x: 262, y: 44, w: 16, h: 10, rx: 3 }
+    { r: 'calves', t: 'ellipse', cx: 288, cy: 310, rx: 12, ry: 30 }
   ];
 
   function shapeSvg(sh, fill, fo, stroke) {
     const sw = stroke !== 'none' ? 2 : 0;
     const dash = stroke !== 'none' ? '4 3' : '';
     const common = `fill="${fill}" fill-opacity="${fo.toFixed(2)}" stroke="${stroke}" stroke-width="${sw}" stroke-dasharray="${dash}"`;
-    const tip = `<title>${LABEL[sh.r]}</title>`;
+    const tip = `<title>${LABEL[sh.r] || sh.r}</title>`;
     if (sh.t === 'ellipse') {
       return `<ellipse cx="${sh.cx}" cy="${sh.cy}" rx="${sh.rx}" ry="${sh.ry}" ${common}>${tip}</ellipse>`;
     }
@@ -188,7 +201,7 @@
     view.innerHTML = `<div class="section-title">肌肉覆盖图 · 一眼看练全没</div>
       <div class="cv-selector"><select id="cvSel">${opts}</select></div>
       <div id="cvBody"></div>
-      <div class="cv-tip">绿色越深 = 该部位组数越多；<span class="cv-red">红框</span> = 本次没练到、建议补。悬停图形看部位名。</div>`;
+      <div class="cv-tip">绿色越深 = 该部位组数越多；<span class="cv-red">红框</span> = 本次没练到、建议补。腿已拆为 股四/臀/腘绳，背拆为 背阔肌/上背，手臂拆为 肱二/肱三。悬停图形看部位名。</div>`;
     const sel = view.querySelector('#cvSel');
     function update() {
       const v = sel.value;
