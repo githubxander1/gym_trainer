@@ -306,3 +306,30 @@ textarea.form-input { resize: vertical; }
   border-radius: 10px; color: var(--accent-2); text-decoration: none; font-size: 13px; word-break: break-all;
 }
 .kn-link:active { transform: scale(.99); }
+
+/* ---------- 肌肉覆盖图 ---------- */
+.cv-selector { padding: 10px 14px 4px; }
+.cv-selector select { width: 100%; padding: 11px 12px; border-radius: 12px; background: var(--bg-elev); color: var(--text); border: 1px solid var(--line); font-size: 15px; -webkit-appearance: none; appearance: none; }
+.cv-map { display: flex; justify-content: center; padding: 8px 0 2px; }
+.cv-map svg { width: 100%; max-width: 340px; height: auto; }
+.cv-stat { text-align: center; padding: 10px 14px 4px; }
+.cv-stat-num { font-size: 30px; font-weight: 800; color: #2dd4bf; line-height: 1.1; }
+.cv-stat-label { font-size: 13px; color: var(--text-dim); margin-top: 2px; }
+.cv-bar { height: 8px; border-radius: 5px; background: var(--bg-elev); margin: 8px 34px 0; overflow: hidden; }
+.cv-bar-fill { height: 100%; background: linear-gradient(90deg, #2dd4bf, #0d9488); }
+.cv-lists { display: flex; gap: 10px; padding: 14px 14px 22px; }
+.cv-col { flex: 1; min-width: 0; }
+.cv-col-title { font-size: 12px; font-weight: 700; margin-bottom: 7px; letter-spacing: .5px; }
+.cv-col-title.cv-ok { color: #2dd4bf; }
+.cv-col-title.cv-miss { color: #ef4444; }
+.cv-item { display: flex; justify-content: space-between; align-items: center; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px; margin-bottom: 6px; font-size: 13px; }
+.cv-item.cv-ok b { color: #2dd4bf; font-weight: 700; }
+.cv-item.cv-miss i { color: #ef4444; font-style: normal; font-size: 11px; }
+.cv-tip { font-size: 12px; color: var(--text-dim); padding: 0 16px 12px; line-height: 1.55; }
+.cv-tip .cv-red { color: #ef4444; font-weight: 700; }
+.cv-chest { padding: 4px 16px 6px; }
+.cv-chest-title { font-size: 12px; font-weight: 700; color: var(--text-dim); margin-bottom: 7px; letter-spacing: .5px; }
+.cv-chest-row { display: flex; gap: 8px; }
+.cv-chest-row span { flex: 1; text-align: center; border-radius: 9px; padding: 9px 4px; font-size: 12px; font-weight: 600; border: 1px solid var(--line); }
+.cv-light-on { background: rgba(45,212,191,.16); color: #2dd4bf; border-color: rgba(45,212,191,.5); }
+.cv-light-off { background: var(--bg-elev); color: var(--text-dim); }

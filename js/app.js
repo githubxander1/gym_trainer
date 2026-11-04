@@ -622,6 +622,7 @@
     tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === tab));
     if (tab === 'library') renderLibrary();
     else if (tab === 'knowledge') renderKnowledge();
+    else if (tab === 'coverage') window.Coverage.render(view);
     else if (tab === 'plan') { planView = 'list'; renderPlanList(); }
   }
   tabs.forEach((t) => { t.onclick = () => switchTab(t.dataset.tab); });
