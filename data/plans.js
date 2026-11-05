@@ -5,7 +5,7 @@ window.PRESET_PLANS = [
     "name": "周一 · 胸·肩·手臂",
     "tags": [],
     "level": "进阶",
-    "intro": "进阶推日（哑铃+健身凳）：上胸 / 中胸 / 下胸 / 肩三束 / 三头，胸三个维度齐全。复合动作优先、孤立随后：上斜卧推主打上胸（最显形），平板卧推给中胸量，飞鸟+下斜飞鸟分别覆盖胸中部与下胸（下斜孤立下胸、避免只练上中）；肩上推举练肩前+整体，侧上举造中束宽度，反向飞鸟用站姿俯身版（不占凳、不扶凳）补后束改善圆肩；三头用窄握推举（胸+三头复合）+ 凳臂屈伸（自重、不过顶、护肩）。9 个动作、28 组。主项留 1–2 次余力，辅助留 1–3 次；稳定达成目标次数后再小幅加重。",
+    "intro": "进阶推日（哑铃+健身凳）：胸三维度（上斜卧推打上胸、平板卧推打中胸、下斜飞鸟孤立下胸）+ 肩三束（肩上推举打前束、侧上举打中束、站姿反向飞鸟打后束）+ 三头（窄握推举复合 + 凳臂屈伸自重）。胸三维度、肩三束齐全，每个部位只选最高效动作、无重复（全场仅 1 个飞鸟）；动作按肌群穿插排序（胸 / 肩 / 三头交替），不连续练同一肌群，给肌肉恢复间隔。8 个动作、25 组。主项留 1–2 次余力，辅助留 1–3 次；稳定达成目标次数后再小幅加重。",
     "warmup": [
       {
         "kind": "stretch",
@@ -33,16 +33,6 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0289",
-        "label": "哑铃卧推",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 60
-      },
-      {
-        "kind": "exercise",
         "exId": "0404",
         "label": "哑铃坐姿肩上推举",
         "sets": 3,
@@ -54,25 +44,13 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0308",
-        "label": "哑铃飞鸟",
+        "exId": "0289",
+        "label": "哑铃卧推",
         "sets": 3,
         "mode": "rep",
-        "reps": 12,
+        "reps": 10,
         "workSec": 30,
-        "restSec": 40,
-        "note": "胸中部孤立拉伸；与哑铃挤压卧推按训练周期二选一，不额外叠加组数。"
-      },
-      {
-        "kind": "exercise",
-        "exId": "0302",
-        "label": "哑铃下斜飞鸟",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 40,
-        "note": "下斜角度孤立下胸（胸肌下部），与上斜/平板互补，覆盖胸的三个维度。"
+        "restSec": 60
       },
       {
         "kind": "exercise",
@@ -86,17 +64,6 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0380",
-        "label": "哑铃反向飞鸟",
-        "sets": 3,
-        "mode": "rep",
-        "reps": 15,
-        "workSec": 30,
-        "restSec": 35,
-        "note": "站姿俯身、不扶凳完成：双脚与肩同宽，上身前倾约 45°，双臂微屈向两侧平举至肩高，练肩后束、改善圆肩。"
-      },
-      {
-        "kind": "exercise",
         "exId": "0296",
         "label": "哑铃窄握推举",
         "sets": 3,
@@ -105,6 +72,28 @@ window.PRESET_PLANS = [
         "workSec": 30,
         "restSec": 40,
         "note": "双手间距略窄于肩，胸+三头复合，不过顶、护肩。"
+      },
+      {
+        "kind": "exercise",
+        "exId": "0302",
+        "label": "哑铃下斜飞鸟",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 40,
+        "note": "下斜角度孤立下胸（胸肌下部），与上斜/平板互补，覆盖胸三个维度；全场只保留这一个飞鸟，避免动作重复。"
+      },
+      {
+        "kind": "exercise",
+        "exId": "0380",
+        "label": "哑铃反向飞鸟",
+        "sets": 3,
+        "mode": "rep",
+        "reps": 15,
+        "workSec": 30,
+        "restSec": 35,
+        "note": "站姿俯身、不扶凳完成：双脚与肩同宽，上身前倾约 45°，双臂微屈向两侧平举至肩高，练肩后束、改善圆肩。"
       },
       {
         "kind": "exercise",
@@ -205,16 +194,6 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
-        "exId": "0312",
-        "label": "哑铃锤式弯举",
-        "sets": 2,
-        "mode": "rep",
-        "reps": 12,
-        "workSec": 30,
-        "restSec": 45
-      },
-      {
-        "kind": "exercise",
         "exId": "0276",
         "label": "死虫",
         "sets": 3,
@@ -224,6 +203,16 @@ window.PRESET_PLANS = [
         "restSec": 40,
         "repSec": 3,
         "note": "组内左右交替，共 12 次，每侧 6 次；腰部保持稳定。"
+      },
+      {
+        "kind": "exercise",
+        "exId": "0312",
+        "label": "哑铃锤式弯举",
+        "sets": 2,
+        "mode": "rep",
+        "reps": 12,
+        "workSec": 30,
+        "restSec": 45
       },
       {
         "kind": "exercise",
@@ -299,6 +288,16 @@ window.PRESET_PLANS = [
       },
       {
         "kind": "exercise",
+        "exId": "1459",
+        "label": "哑铃罗马尼亚硬拉",
+        "sets": 4,
+        "mode": "rep",
+        "reps": 10,
+        "workSec": 30,
+        "restSec": 60
+      },
+      {
+        "kind": "exercise",
         "exId": "2796",
         "label": "哑铃登阶箭步蹲",
         "sets": 3,
@@ -307,16 +306,6 @@ window.PRESET_PLANS = [
         "workSec": 30,
         "restSec": 60,
         "note": "一脚踩凳、另一腿蹬凳站起再落下，主练股四头肌；凳高约膝下，控制下落不磕碰。"
-      },
-      {
-        "kind": "exercise",
-        "exId": "1459",
-        "label": "哑铃罗马尼亚硬拉",
-        "sets": 4,
-        "mode": "rep",
-        "reps": 10,
-        "workSec": 30,
-        "restSec": 60
       },
       {
         "kind": "exercise",
