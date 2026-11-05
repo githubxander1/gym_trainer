@@ -107,23 +107,28 @@ async function main() {
   paused.elements.get('stopBtn').onclick();
   assert.equal(paused.audios[0].paused, true);
 
-  const expectedSets = [23, 25, 27];
-  for (const [i, plan] of plans.slice(0, 3).entries()) {
+  for (const plan of plans.slice(0, 3)) {
     const segments = r.player.buildSegments(plan);
     const work = segments.filter((s) => s.type === 'work');
-    assert.equal(work.length, expectedSets[i]);
+    // 期望段数从计划数据推导：每个训练组 1 段 + 每个有氧收尾 1 段，避免写死数字随计划改动失效。
+    const expectedSets = plan.items.reduce((n, b) => n + (b.kind === 'exercise' ? (b.sets || 0) : b.kind === 'cardio' ? 1 : 0), 0);
+    assert.equal(work.length, expectedSets, `${plan.id} 每个训练组与有氧收尾各对应 1 个执行段`);
     for (const block of plan.items) {
+      if (block.kind !== 'exercise') continue;
       assert.ok(exercises.some((e) => e.id === block.exId), '动作必须真实存在');
       if (block.sideMode !== 'alternatingSets') continue;
-      const sides = work.filter((s) => s.ex.id === block.exId).map((s) => s.side);
+      const sides = work.filter((s) => s.ex && s.ex.id === block.exId).map((s) => s.side);
       assert.deepEqual(Array.from(sides), ['左侧', '右侧', '左侧', '右侧']);
     }
     const minutes = r.player.estimatePlanSec(plan) / 60;
-    assert.ok(minutes >= 30 && minutes <= 40, `${plan.id} 时长 ${minutes.toFixed(1)} 分钟`);
-    console.log(`${plan.name}: ${work.length} 组，含热身/休息/放松约 ${minutes.toFixed(1)} 分钟`);
+    assert.ok(minutes >= 30 && minutes <= 70, `${plan.id} 时长 ${minutes.toFixed(1)} 分钟（含跳绳收尾）`);
+    console.log(`${plan.name}: ${work.length} 段，含热身/休息/放松/跳绳约 ${minutes.toFixed(1)} 分钟`);
   }
-  const bird = r.player.buildSegments(plans[1]).find((s) => s.ex && s.ex.id === 'local-bird-dog' && s.type === 'work');
-  assert.equal(bird.repMs, 4000, '鸟狗慢节奏与估时一致');
+  // 图库只允许真实动作（带可播放动图），不允许自造静态示意图占位。
+  assert.ok(!exercises.some((e) => String(e.id).startsWith('local-')), '图库不应含自建占位动作');
+  const tap = r.player.buildSegments(plans[1]).find((s) => s.ex && s.ex.id === '3699' && s.type === 'work');
+  assert.ok(tap, '周三须含肩点(3699)');
+  assert.equal(tap.repMs, 3000, '肩点节奏与估时一致');
   // 其他七个预设没有丢失，旧计划缺少单侧字段时仍按原组数跟练。
   assert.equal(plans.length, 10);
   console.log('音乐自动切歌/末尾兜底/关闭暂停/错误恢复、左右侧及计划时长检查通过。');
