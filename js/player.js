@@ -529,13 +529,13 @@ window.TrainerPlayer = (function () {
       if (seg.isRep) {
         repDone = 0;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，${seg.side ? seg.side + '，' : ''}开始`, true);
+        speak(`第 ${seg.set} 组，${seg.label || (ex ? (ex.nameZh || ex.name) : '')}，${seg.side ? seg.side + '，' : ''}开始`, true);
         Cue.start();
         startRep();
       } else {
         endTime = Date.now() + seg.sec * 1000;
         render();
-        speak(`第 ${seg.set} 组，${ex ? (ex.nameZh || ex.name) : ''}，${seg.side ? seg.side + '，' : ''}开始`, true);
+        speak(`第 ${seg.set} 组，${seg.label || (ex ? (ex.nameZh || ex.name) : '')}，${seg.side ? seg.side + '，' : ''}开始`, true);
         Cue.start();
         startTick();
       }

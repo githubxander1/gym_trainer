@@ -461,7 +461,7 @@
   function itemRowHtml(it) {
     if (it.kind === 'exercise') {
       const ex = window.AppData.get(it.exId);
-      const nm = ex ? (ex.nameZh || ex.name) : '?';
+      const nm = it.label || (ex ? (ex.nameZh || ex.name) : '?');
       const spec = it.mode === 'rep' ? `${it.sets} 组 · ${it.reps} 次` : `${it.sets} 组 · ${it.workSec}s`;
       return `<div class="pd-row" data-ex="${it.exId}"><div class="pd-name">${esc(nm)}${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}</div><div class="pd-set">${spec}${it.sideMode === 'alternatingSets' ? ' · 左右轮换' : ''} · 休${it.restSec}s</div></div>`;
     }
