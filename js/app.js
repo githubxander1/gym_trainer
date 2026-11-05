@@ -465,6 +465,10 @@
       const spec = it.mode === 'rep' ? `${it.sets} 组 · ${it.reps} 次` : `${it.sets} 组 · ${it.workSec}s`;
       return `<div class="pd-row" data-ex="${it.exId}"><div class="pd-name">${esc(nm)}${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}</div><div class="pd-set">${spec}${it.sideMode === 'alternatingSets' ? ' · 左右轮换' : ''} · 休${it.restSec}s</div></div>`;
     }
+    if (it.kind === 'cardio') {
+      const min = Math.round((it.durSec || 600) / 60);
+      return `<div class="pd-row pd-stretch"><div class="pd-name">🪢 ${esc(it.name)}${it.note ? `<div class="sub">${esc(it.note)}</div>` : ''}</div><div class="pd-set">有氧 · 目标 ${it.count || 0} 个 · 约 ${min} 分钟</div></div>`;
+    }
     return `<div class="pd-row pd-stretch"><div class="pd-name">${esc(it.name)}</div><div class="pd-set">${esc(it.dur || 30)}s</div></div>`;
   }
 
@@ -535,6 +539,18 @@
               ${workStepper}
               <button data-act="rest" data-d="-5">−</button><span class="val">休${it.restSec}s</span><button data-act="rest" data-d="5">+</button>
             </div>
+          </div>
+          <div class="reorder">${up}${down}</div>
+          <button class="del" data-del="1">✕</button>
+        </div>`;
+    }
+    if (it.kind === 'cardio') {
+      const min = Math.round((it.durSec || 600) / 60);
+      return `
+        <div class="plan-item cardio" data-key="${key}" data-i="${i}">
+          <div class="info">
+            <div class="name">🪢 ${esc(it.name)}</div>
+            <div class="sub">目标 ${it.count || 0} 个 · 约 ${min} 分钟${it.note ? ' · ' + esc(it.note) : ''}</div>
           </div>
           <div class="reorder">${up}${down}</div>
           <button class="del" data-del="1">✕</button>

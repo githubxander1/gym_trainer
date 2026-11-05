@@ -315,6 +315,11 @@ window.TrainerPlayer = (function () {
         if (!isLast) segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: null, mini: true });
         return;
       }
+      if (block.kind === 'cardio') {
+        segs.push({ type: 'work', label: block.name || '有氧收尾', set: 1, totalSets: 1, sec: Math.max(30, block.durSec || 600), isRep: false, count: block.count || 0, note: block.note || '', isCardio: true });
+        if (!isLast) segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: null, mini: true });
+        return;
+      }
       // exercise
       const ex = window.AppData.get(block.exId);
       if (!ex) return;
@@ -424,6 +429,7 @@ window.TrainerPlayer = (function () {
     const ringPct = seg.sec > 0 ? (1 - remain / seg.sec) : 0;
     let setLabel;
     if (seg.type === 'stretch') setLabel = seg.name;
+    else if (seg.isCardio) setLabel = `${seg.label} · 目标 ${seg.count} 个`;
     else if (seg.type === 'rest') setLabel = seg.mini ? '稍作调整' : `下一组 ${seg.set}/${seg.totalSets} 组`;
     else setLabel = `第 ${seg.set}/${seg.totalSets} 组`;
     if (seg.side) setLabel += ' · ' + seg.side;
