@@ -301,6 +301,17 @@ window.TrainerPlayer = (function () {
   });
 
   // ---------- 段构建（支持 warmup / items / cooldown 三种 phase） ----------
+  // 休息段要预告「下一个块」是什么：exercise 显示动作名+动图，cardio/stretch 显示环节名且不放动图。
+  // 早期版本在取不到下一个动作时会 fallback 到当前动作，导致「A 已练完，下一组还显示 A」。
+  function nextBlockInfo(nb) {
+    if (!nb) return { nextEx: null, nextLabel: '休息', nextSets: 0 };
+    if (nb.kind === 'exercise') {
+      const e = window.AppData.get(nb.exId) || null;
+      return { nextEx: e, nextLabel: nb.label || (e && (e.nameZh || e.name)) || '下一动作', nextSets: nb.sets || 0 };
+    }
+    return { nextEx: null, nextLabel: nb.name || (nb.kind === 'cardio' ? '有氧收尾' : '放松'), nextSets: 0 };
+  }
+
   // 输入：plan 对象 { warmup:[], items:[], cooldown:[] } 或 纯 items 数组
   function buildSegments(plan) {
     const blocks = Array.isArray(plan)
@@ -312,12 +323,18 @@ window.TrainerPlayer = (function () {
       if (block.kind === 'stretch') {
         const sec = Math.max(5, block.dur || 30);
         segs.push({ type: 'stretch', name: block.name || '拉伸', desc: block.desc || '', sec, ex: block.exId ? window.AppData.get(block.exId) : null });
-        if (!isLast) segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: null, mini: true });
+        if (!isLast) {
+          const ni = nextBlockInfo(blocks[bi + 1]);
+          segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: ni.nextEx, nextLabel: ni.nextLabel, mini: true });
+        }
         return;
       }
       if (block.kind === 'cardio') {
         segs.push({ type: 'work', label: block.name || '有氧收尾', set: 1, totalSets: 1, sec: Math.max(30, block.durSec || 600), isRep: false, count: block.count || 0, note: block.note || '', isCardio: true });
-        if (!isLast) segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: null, mini: true });
+        if (!isLast) {
+          const ni = nextBlockInfo(blocks[bi + 1]);
+          segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: ni.nextEx, nextLabel: ni.nextLabel, mini: true });
+        }
         return;
       }
       // exercise
@@ -336,10 +353,10 @@ window.TrainerPlayer = (function () {
           side: block.sideMode === 'alternatingSets' ? ((s + 1) % 2 ? '左侧' : '右侧') : '' });
       }
       if (!isLast) {
-        const nb = blocks[bi + 1];
-        const nextEx = window.AppData.get((nb && nb.exId) || '');
-        const nextLabel = (nb && nb.label) || (nextEx && (nextEx.nameZh || nextEx.name)) || '下一动作';
-        segs.push({ type: 'rest', sec: rest, ex, set: 1, totalSets: 1, nextEx, nextLabel });
+        // 换动作过渡：ex 置空，只靠 nextEx/nextLabel 预告下一个块，绝不回退显示刚练完的动作。
+        const ni = nextBlockInfo(blocks[bi + 1]);
+        segs.push({ type: 'rest', sec: rest, ex: null, set: 1, totalSets: 1,
+          nextEx: ni.nextEx, nextLabel: ni.nextLabel, nextSets: ni.nextSets, isTransition: true });
       }
     });
     if (segs.length && segs[segs.length - 1].type === 'rest') segs.pop();
@@ -389,7 +406,8 @@ window.TrainerPlayer = (function () {
   function render() {
     const seg = segments[idx];
     if (!seg) { renderDone(); return; }
-    const ex = (seg.type === 'work') ? seg.ex : (seg.nextEx || seg.ex);
+    // 休息段只显示「下一个动作」；取不到就不放动图，不再 fallback 到刚练完的动作。
+    const ex = (seg.type === 'work') ? seg.ex : seg.nextEx;
     const nameZh = seg.type === 'stretch' ? seg.name
       : seg.type === 'rest' ? (seg.nextLabel || (seg.nextEx && (seg.nextEx.nameZh || seg.nextEx.name)) || '休息')
       : (seg.label || (ex && (ex.nameZh || ex.name)) || '休息');
@@ -430,7 +448,9 @@ window.TrainerPlayer = (function () {
     let setLabel;
     if (seg.type === 'stretch') setLabel = seg.name;
     else if (seg.isCardio) setLabel = `${seg.label} · 目标 ${seg.count} 个`;
-    else if (seg.type === 'rest') setLabel = seg.mini ? '稍作调整' : `下一组 ${seg.set}/${seg.totalSets} 组`;
+    else if (seg.type === 'rest') setLabel = seg.mini ? '稍作调整'
+      : seg.isTransition ? (seg.nextSets ? `下一动作 · 共 ${seg.nextSets} 组` : '准备下一环节')
+      : `下一组 ${seg.set}/${seg.totalSets} 组`;
     else setLabel = `第 ${seg.set}/${seg.totalSets} 组`;
     if (seg.side) setLabel += ' · ' + seg.side;
     container.innerHTML = `
@@ -524,7 +544,7 @@ window.TrainerPlayer = (function () {
     const seg = segments[idx];
     if (!seg) { renderDone(); return; }
     warned3 = false;
-    const ex = (seg.type === 'work') ? seg.ex : (seg.nextEx || seg.ex);
+    const ex = (seg.type === 'work') ? seg.ex : seg.nextEx;
     if (seg.type === 'work') {
       if (seg.isRep) {
         repDone = 0;
@@ -548,7 +568,7 @@ window.TrainerPlayer = (function () {
     } else {
       endTime = Date.now() + seg.sec * 1000;
       render();
-      speak(`休息 ${seg.sec} 秒${seg.side ? '，下一组' + seg.side : ''}`, true);
+      speak(`休息 ${seg.sec} 秒${seg.side ? '，下一组' + seg.side : ''}${seg.isTransition && seg.nextLabel ? '，接下来 ' + seg.nextLabel : ''}`, true);
       Cue.restStart();
       startTick();
     }
