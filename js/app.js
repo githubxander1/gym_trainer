@@ -3,6 +3,7 @@
   const LS_MYPLANS = 'lianlian_myplans_v1';
   const LS_SOUND = 'lianlian_sound_v1';
   const LS_SOUND_MODE = 'lianlian_sound_mode_v1';
+  const LS_TRAIN_DAYS = 'lianlian_train_days_v1';
 
   const ALL_TAGS = ['增肌', '减脂', '全身', '有氧', '徒手', '哑铃', '女士', '凯格尔', '腿臀', '拉', '推', '盆底'];
 
@@ -16,6 +17,8 @@
   let viewPlanId = null;
   let viewIsPreset = false;
   let editId = null;
+  let trainDays = [];       // 已训练日期 ['YYYY-MM-DD']，只记哪天练过，不记重量次数
+  let logYear = null, logMonth = null;
 
   const view = document.getElementById('view');
   const tabs = document.querySelectorAll('.tab');
@@ -73,6 +76,23 @@
     try { myPlans = JSON.parse(localStorage.getItem(LS_MYPLANS)) || []; } catch (e) { myPlans = []; }
   }
   function uid() { return 'm' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+  // ---------- 训练日历：只存日期，纯本地 ----------
+  function loadTrainDays() {
+    try {
+      const arr = JSON.parse(localStorage.getItem(LS_TRAIN_DAYS));
+      trainDays = Array.isArray(arr) ? arr.filter((s) => /^\d{4}-\d{2}-\d{2}$/.test(s)) : [];
+    } catch (e) { trainDays = []; }
+  }
+  function saveTrainDays() { localStorage.setItem(LS_TRAIN_DAYS, JSON.stringify(trainDays)); }
+  function pad2(n) { return String(n).padStart(2, '0'); }
+  function dateKey(d) { return `${d.getFullYear()}-${pad2(d.getMonth() + 1)}-${pad2(d.getDate())}`; }
+  function todayKey() { return dateKey(new Date()); }
+  function markToday() {
+    const k = todayKey();
+    if (trainDays.includes(k)) return false;
+    trainDays.push(k); saveTrainDays(); return true;
+  }
   function getPreset(id) { return (window.PRESET_PLANS || []).find((p) => p.id === id) || null; }
   function getMyPlan(id) { return myPlans.find((p) => p.id === id) || null; }
   function findPlan(id) {
@@ -379,6 +399,58 @@
     mask.onclick = (e) => { if (e.target === mask) mask.remove(); };
   }
 
+  // ---------- 训练记录日历 ----------
+  function renderLog() {
+    const now = new Date();
+    if (logYear == null) { logYear = now.getFullYear(); logMonth = now.getMonth(); }
+    const first = new Date(logYear, logMonth, 1).getDay();
+    const offset = (first + 6) % 7;                       // 周一开头
+    const dayCount = new Date(logYear, logMonth + 1, 0).getDate();
+    const tk = todayKey();
+    const prefix = `${logYear}-${pad2(logMonth + 1)}-`;
+    let cells = Array.from({ length: offset }, () => `<div class="cal-cell empty"></div>`);
+    for (let d = 1; d <= dayCount; d++) {
+      const key = prefix + pad2(d);
+      const done = trainDays.includes(key);
+      const future = key > tk;
+      const cls = ['cal-cell', done ? 'done' : '', key === tk ? 'today' : '', future ? 'future' : ''].filter(Boolean).join(' ');
+      cells.push(`<button class="${cls}" data-date="${key}" ${future ? 'disabled' : ''} aria-label="${key}${done ? ' 已训练' : ''}"><span class="cal-num">${d}</span>${done ? '<span class="cal-tick">✓</span>' : ''}</button>`);
+    }
+    while (cells.length % 7) cells.push('<div class="cal-cell empty"></div>');
+    const monthCount = trainDays.filter((s) => s.startsWith(prefix)).length;
+    view.innerHTML = `
+      <div class="log-head">
+        <div><div class="section-title" style="margin:0">训练记录</div><div class="log-sub">点日期补记或取消，完成后也会自动记今天</div></div>
+        <button class="log-today" id="logToday">今天</button>
+      </div>
+      <div class="cal-nav">
+        <button id="calPrev" aria-label="上个月">‹</button>
+        <div class="cal-title">${logYear} 年 ${logMonth + 1} 月</div>
+        <button id="calNext" aria-label="下个月">›</button>
+      </div>
+      <div class="cal-week">${['一', '二', '三', '四', '五', '六', '日'].map((w) => `<span>${w}</span>`).join('')}</div>
+      <div class="cal-grid">${cells.join('')}</div>
+      <div class="log-stats"><span>本月 <b>${monthCount}</b> 天</span><span>累计 <b>${trainDays.length}</b> 天</span></div>
+      <div class="log-hint">只记哪天练过，不记重量次数。数据存在本机浏览器里。</div>`;
+    document.getElementById('calPrev').onclick = () => shiftMonth(-1);
+    document.getElementById('calNext').onclick = () => shiftMonth(1);
+    document.getElementById('logToday').onclick = () => { const d = new Date(); logYear = d.getFullYear(); logMonth = d.getMonth(); renderLog(); };
+    view.querySelectorAll('.cal-cell[data-date]').forEach((b) => {
+      b.onclick = () => {
+        const key = b.dataset.date;
+        if (key > tk) return;
+        if (trainDays.includes(key)) { trainDays = trainDays.filter((s) => s !== key); toast('已取消 ' + key); }
+        else { trainDays.push(key); toast('已记录 ' + key); }
+        saveTrainDays(); renderLog();
+      };
+    });
+  }
+  function shiftMonth(delta) {
+    const d = new Date(logYear, logMonth + delta, 1);
+    logYear = d.getFullYear(); logMonth = d.getMonth();
+    renderLog();
+  }
+
   // ---------- 左滑删除（我的计划） ----------
   function bindSwipe() {
     view.querySelectorAll('.swipe').forEach((sw) => {
@@ -622,7 +694,11 @@
     if (!total) { alert('计划是空的，先去添加动作'); return; }
     setTrainingMode(true);
     // 播放器需要 warmup/items/cooldown；预设计划/preset 对象结构一致
-    window.TrainerPlayer.start(planObj, view, () => { setTrainingMode(false); switchTab('plan'); });
+    window.TrainerPlayer.start(planObj, view, (completed) => {
+      setTrainingMode(false);
+      if (completed && markToday()) toast('已记录今天的训练');
+      switchTab('plan');
+    });
   }
 
   function toast(msg) {
@@ -639,6 +715,7 @@
     if (tab === 'library') renderLibrary();
     else if (tab === 'knowledge') renderKnowledge();
     else if (tab === 'coverage') window.Coverage.render(view);
+    else if (tab === 'log') renderLog();
     else if (tab === 'plan') { planView = 'list'; renderPlanList(); }
   }
   tabs.forEach((t) => { t.onclick = () => switchTab(t.dataset.tab); });
@@ -648,7 +725,7 @@
   // ---------- 初始化 ----------
   async function init() {
     updateSoundBtn();
-    loadMyPlans(); updateBadge();
+    loadMyPlans(); updateBadge(); loadTrainDays();
     await window.AppData.load();
     if (!window.AppData.all().length) {
       view.innerHTML = `<div class="empty"><div class="big">⚠️</div>动作库加载失败<br>请用本地服务器打开（见 README）</div>`;

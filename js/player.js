@@ -493,7 +493,7 @@ window.TrainerPlayer = (function () {
         <div class="done-sub">本次共 ${total} 组 · 用时 ${fmt(getElapsed())}</div>
         <button class="primary-btn" id="backBtn">返回</button>
       </div>`;
-    document.getElementById('backBtn').onclick = () => { if (onFinish) onFinish(); };
+    document.getElementById('backBtn').onclick = () => { if (onFinish) onFinish(true); };
     speak('训练完成，辛苦了');
     Cue.workoutComplete();
   }
@@ -609,7 +609,7 @@ window.TrainerPlayer = (function () {
     stopMusic();
     if (durTimer) { clearInterval(durTimer); durTimer = null; }
     try { window.speechSynthesis && window.speechSynthesis.cancel(); } catch (e) {}
-    if (onFinish) onFinish();
+    if (onFinish) onFinish(false);
   }
 
   async function start(planObj, mountEl, finishCb) {

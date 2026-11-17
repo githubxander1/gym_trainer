@@ -126,9 +126,14 @@ async function main() {
   }
   // 图库只允许真实动作（带可播放动图），不允许自造静态示意图占位。
   assert.ok(!exercises.some((e) => String(e.id).startsWith('local-')), '图库不应含自建占位动作');
-  const tap = r.player.buildSegments(plans[1]).find((s) => s.ex && s.ex.id === '3699' && s.type === 'work');
-  assert.ok(tap, '周三须含肩点(3699)');
-  assert.equal(tap.repMs, 3000, '肩点节奏与估时一致');
+  const wed = plans[1];
+  const ids = new Set(wed.items.filter((b) => b.kind === 'exercise').map((b) => b.exId));
+  assert.ok(ids.has('1331'), '周三须含反握上斜凳划船(1331)，补足背部容量');
+  assert.ok(!ids.has('3699'), '周三不再含不可加重的肩点(3699)');
+  const sumSets = (list) => wed.items.filter((b) => b.kind === 'exercise' && list.includes(b.exId)).reduce((n, b) => n + b.sets, 0);
+  assert.equal(sumSets(['0651', '0293', '1331']), 13, '周三背部直接组数 13');
+  assert.equal(sumSets(['0276', '0705']), 6, '周三核心组数压到 6');
+  assert.equal(r.player.buildSegments(wed).find((s) => s.ex && s.ex.id === '1331' && s.type === 'work').repMs, 2500, '新划船节奏与估时一致');
   // 其他七个预设没有丢失，旧计划缺少单侧字段时仍按原组数跟练。
   assert.equal(plans.length, 10);
   console.log('音乐自动切歌/末尾兜底/关闭暂停/错误恢复、左右侧及计划时长检查通过。');

@@ -333,3 +333,24 @@ textarea.form-input { resize: vertical; }
 .cv-chest-row span { flex: 1; text-align: center; border-radius: 9px; padding: 9px 4px; font-size: 12px; font-weight: 600; border: 1px solid var(--line); }
 .cv-light-on { background: rgba(45,212,191,.16); color: #2dd4bf; border-color: rgba(45,212,191,.5); }
 .cv-light-off { background: var(--bg-elev); color: var(--text-dim); }
+
+/* ---------- 训练记录日历 ---------- */
+.log-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 2px 12px; }
+.log-sub { font-size: 12px; color: var(--text-dim); margin-top: 3px; }
+.log-today { background: var(--bg-elev2); color: var(--accent); border: 1px solid var(--line); border-radius: 10px; padding: 8px 14px; font-size: 13px; cursor: pointer; white-space: nowrap; }
+.cal-nav { display: flex; align-items: center; justify-content: space-between; background: var(--bg-elev); border: 1px solid var(--line); border-radius: var(--radius) var(--radius) 0 0; padding: 10px 12px; }
+.cal-nav button { width: 34px; height: 34px; background: var(--bg-elev2); color: var(--text); border: 1px solid var(--line); border-radius: 9px; font-size: 20px; line-height: 1; cursor: pointer; }
+.cal-title { font-weight: 700; font-size: 15px; }
+.cal-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 10px 12px 4px; background: var(--bg-elev); border-left: 1px solid var(--line); border-right: 1px solid var(--line); }
+.cal-week span { text-align: center; font-size: 11px; color: var(--text-dim); }
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; padding: 4px 12px 14px; background: var(--bg-elev); border: 1px solid var(--line); border-top: none; border-radius: 0 0 var(--radius) var(--radius); }
+.cal-cell { position: relative; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; background: var(--bg-elev2); border: 1px solid transparent; border-radius: 10px; color: var(--text); font-size: 14px; cursor: pointer; padding: 0; }
+.cal-cell.empty { background: none; pointer-events: none; }
+.cal-cell.future { opacity: .3; cursor: default; }
+.cal-cell.done { background: rgba(74,222,128,.18); border-color: rgba(74,222,128,.55); color: var(--accent); font-weight: 700; }
+.cal-cell.today { border-color: var(--accent-2); }
+.cal-tick { position: absolute; right: 4px; top: 2px; font-size: 10px; }
+.log-stats { display: flex; gap: 10px; margin-top: 14px; }
+.log-stats span { flex: 1; text-align: center; background: var(--bg-elev); border: 1px solid var(--line); border-radius: 12px; padding: 12px 6px; color: var(--text-dim); font-size: 13px; }
+.log-stats b { color: var(--accent); font-size: 20px; margin-left: 4px; }
+.log-hint { margin-top: 12px; font-size: 12px; color: var(--text-dim); line-height: 1.5; padding: 0 4px; }
