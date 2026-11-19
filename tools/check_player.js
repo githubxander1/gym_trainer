@@ -131,11 +131,27 @@ async function main() {
   assert.ok(ids.has('1331'), '周三须含反握上斜凳划船(1331)，补足背部容量');
   assert.ok(!ids.has('3699'), '周三不再含不可加重的肩点(3699)');
   const sumSets = (list) => wed.items.filter((b) => b.kind === 'exercise' && list.includes(b.exId)).reduce((n, b) => n + b.sets, 0);
-  assert.equal(sumSets(['0651', '0293', '1331']), 13, '周三背部直接组数 13');
+  assert.equal(sumSets(['0651', '0293', '1331']), 12, '周三背部直接组数 12（引体 4 + 划船 5 + 反握上斜划船 3）');
   assert.equal(sumSets(['0276', '0705']), 6, '周三核心组数压到 6');
   assert.equal(r.player.buildSegments(wed).find((s) => s.ex && s.ex.id === '1331' && s.type === 'work').repMs, 2500, '新划船节奏与估时一致');
+  const wedSegs = r.player.buildSegments(wed);
+  const firstWork = wedSegs.findIndex((s) => s.type === 'work');
+  assert.ok(!wedSegs.slice(0, firstWork).some((s) => s.type === 'rest'), '热身到首个动作之间不应插 8 秒休息');
+  const sideBridge = wed.items.find((b) => b.kind === 'exercise' && b.exId === '0705');
+  assert.equal(sideBridge.mode, 'rep', '侧桥按次数计数，不再倒计时');
   // 其他七个预设没有丢失，旧计划缺少单侧字段时仍按原组数跟练。
   assert.equal(plans.length, 10);
-  console.log('音乐自动切歌/末尾兜底/关闭暂停/错误恢复、左右侧及计划时长检查通过。');
+  // 覆盖图：一三五合计 11 区无缺口；换掉少女深蹲后，后箭步蹲的股四补偿必须仍在。
+  const cov = { window: { AppData: { get: (id) => exercises.find((e) => e.id === id) } } };
+  cov.window.PRESET_PLANS = plans;
+  vm.runInNewContext(
+    fs.readFileSync(path.join(root, 'js/coverage.js'), 'utf8').replace('window.Coverage = { render };', 'window.Coverage = { render, planLoads };'),
+    cov
+  );
+  const loads = cov.window.Coverage.planLoads(['mon-push', 'wed-pull', 'fri-legs']);
+  const gaps = ['chest', 'delts', 'biceps', 'triceps', 'core', 'lats', 'upperback', 'quads', 'glutes', 'hamstrings', 'calves'].filter((k) => !loads[k]);
+  assert.deepEqual(gaps, [], '一三五合计不应有覆盖缺口');
+  assert.ok(loads.quads >= 9, `股四容量 ${loads.quads} 组（高脚杯 5 + 后箭步 4），不因换掉少女深蹲塌掉`);
+  console.log('音乐自动切歌/末尾兜底/关闭暂停/错误恢复、左右侧、计划时长与肌肉覆盖检查通过。');
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; });

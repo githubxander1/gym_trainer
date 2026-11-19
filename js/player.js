@@ -314,16 +314,18 @@ window.TrainerPlayer = (function () {
 
   // 输入：plan 对象 { warmup:[], items:[], cooldown:[] } 或 纯 items 数组
   function buildSegments(plan) {
+    const warmupBlocks = Array.isArray(plan) ? [] : (plan.warmup || []);
     const blocks = Array.isArray(plan)
       ? plan.slice()
-      : (plan.warmup || []).concat(plan.items || [], plan.cooldown || []);
+      : warmupBlocks.concat(plan.items || [], plan.cooldown || []);
     const segs = [];
     blocks.forEach((block, bi) => {
       const isLast = bi === blocks.length - 1;
       if (block.kind === 'stretch') {
         const sec = Math.max(5, block.dur || 30);
         segs.push({ type: 'stretch', name: block.name || '拉伸', desc: block.desc || '', sec, ex: block.exId ? window.AppData.get(block.exId) : null });
-        if (!isLast) {
+        // 热身项后面不再插 8 秒休息：走到健身房本身就是升温，热身要连着练；放松项之间仍留过渡。
+        if (!isLast && bi >= warmupBlocks.length) {
           const ni = nextBlockInfo(blocks[bi + 1]);
           segs.push({ type: 'rest', sec: 8, ex: null, set: 1, totalSets: 1, nextEx: ni.nextEx, nextLabel: ni.nextLabel, mini: true });
         }
