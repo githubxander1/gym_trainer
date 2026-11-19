@@ -139,6 +139,11 @@ async function main() {
   assert.ok(!wedSegs.slice(0, firstWork).some((s) => s.type === 'rest'), '热身到首个动作之间不应插 8 秒休息');
   const sideBridge = wed.items.find((b) => b.kind === 'exercise' && b.exId === '0705');
   assert.equal(sideBridge.mode, 'rep', '侧桥按次数计数，不再倒计时');
+  const fri = plans[2];
+  const friIds = new Set(fri.items.filter((b) => b.kind === 'exercise').map((b) => b.exId));
+  assert.ok(!friIds.has('0496'), '周五不再用需要俯卧凳的反向腿弯举');
+  const singleLegCurl = fri.items.find((b) => b.kind === 'exercise' && b.exId === '0795');
+  assert.ok(singleLegCurl && singleLegCurl.sets === 4 && singleLegCurl.sideMode === 'alternatingSets', '周五改用自重站姿单腿弯举，左右各 2 组');
   // 其他七个预设没有丢失，旧计划缺少单侧字段时仍按原组数跟练。
   assert.equal(plans.length, 10);
   // 覆盖图：一三五合计 11 区无缺口；换掉少女深蹲后，后箭步蹲的股四补偿必须仍在。

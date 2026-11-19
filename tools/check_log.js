@@ -7,7 +7,7 @@ const vm = require('node:vm');
 const root = path.join(__dirname, '..');
 const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert.match(html, /data-tab="log"/, '底部导航须有记录入口');
-assert.match(html, /v=20261117c/, '静态资源版本号须更新，避免缓存旧脚本');
+assert.match(html, /v=20261117d/, '静态资源版本号须更新，避免缓存旧脚本');
 
 const storage = new Map();
 const today = new Date();
